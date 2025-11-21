@@ -59,7 +59,7 @@ const Auth = () => {
 
       toast({
         title: "Berhasil mendaftar!",
-        description: "Akun Anda telah dibuat. Silakan login.",
+        description: "Silakan cek email Anda untuk verifikasi akun. Setelah verifikasi, Anda akan otomatis login.",
       });
       
       // Reset form

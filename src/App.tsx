@@ -9,6 +9,7 @@ import Upload from "./pages/Upload";
 import Dashboard from "./pages/Dashboard";
 import Segments from "./pages/Segments";
 import Auth from "./pages/Auth";
+import VerificationSuccess from "./pages/VerificationSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/auth" element={<Auth />} />
+          <Route path="/verification-success" element={<VerificationSuccess />} />
           <Route path="*" element={
             <Layout>
               <Routes>
