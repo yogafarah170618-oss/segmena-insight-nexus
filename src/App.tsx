@@ -8,6 +8,7 @@ import Landing from "./pages/Landing";
 import Upload from "./pages/Upload";
 import Dashboard from "./pages/Dashboard";
 import Segments from "./pages/Segments";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,15 +19,20 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/segments" element={<Segments />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="*" element={
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/upload" element={<Upload />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/segments" element={<Segments />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          } />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
