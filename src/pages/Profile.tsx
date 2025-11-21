@@ -15,12 +15,18 @@ interface Profile {
   avatar_url: string | null;
 }
 
+interface UserData {
+  email: string;
+  userId: string;
+}
+
 const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [fullName, setFullName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
 
@@ -36,6 +42,11 @@ const Profile = () => {
         navigate("/auth");
         return;
       }
+
+      setUserData({
+        email: session.user.email || "",
+        userId: session.user.id,
+      });
 
       await loadProfile(session.user.id);
     } catch (error: any) {
@@ -88,8 +99,8 @@ const Profile = () => {
       const { error } = await supabase
         .from("profiles")
         .update({
-          full_name: fullName,
-          avatar_url: avatarUrl || null,
+          full_name: fullName.trim() || null,
+          avatar_url: avatarUrl.trim() || null,
         })
         .eq("id", session.user.id);
 
@@ -121,6 +132,9 @@ const Profile = () => {
   }
 
   const getInitials = (name: string) => {
+    if (!name || !name.trim()) {
+      return userData?.email?.charAt(0).toUpperCase() || "U";
+    }
     return name
       .split(" ")
       .map(n => n[0])
@@ -176,29 +190,33 @@ const Profile = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="fullName">Nama Lengkap</Label>
-              <Input
-                id="fullName"
-                type="text"
-                placeholder="Nama Lengkap"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                disabled={saving}
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                value={profile?.id || ""}
+                value={userData?.email || ""}
                 disabled
-                className="bg-muted"
+                className="bg-muted cursor-not-allowed"
               />
               <p className="text-xs text-muted-foreground">
                 Email tidak dapat diubah
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="fullName">
+                Nama Lengkap <span className="text-muted-foreground text-xs">(Opsional)</span>
+              </Label>
+              <Input
+                id="fullName"
+                type="text"
+                placeholder="Masukkan nama lengkap Anda"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                disabled={saving}
+              />
+              <p className="text-xs text-muted-foreground">
+                Nama akan ditampilkan di profil Anda
               </p>
             </div>
 
