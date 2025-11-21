@@ -82,58 +82,58 @@ const Landing = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="relative z-10 container mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 animate-fade-in">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm">Smart Customer Intelligence</span>
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass-card mb-6 sm:mb-8 animate-fade-in">
+            <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-primary" />
+            <span className="text-xs sm:text-sm">Smart Customer Intelligence</span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-4 sm:mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <span className="gradient-text">Segmena</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto animate-fade-in px-4" style={{ animationDelay: "0.2s" }}>
             Platform Customer Intelligence untuk UMKM. Segmentasi otomatis, insight siap pakai, mudah digunakan.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-12 sm:mb-16 animate-fade-in px-4" style={{ animationDelay: "0.3s" }}>
             <Button
               size="lg"
               onClick={() => navigate("/upload")}
-              className="bg-gradient-primary hover:opacity-90 glow-effect text-lg px-8 py-6 group"
+              className="bg-gradient-primary hover:opacity-90 glow-effect text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 group"
             >
               Upload Data
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button
               size="lg"
               variant="outline"
               onClick={() => navigate("/dashboard")}
-              className="glass-card text-lg px-8 py-6 hover:bg-primary/10"
+              className="glass-card text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 hover:bg-primary/10"
             >
               Try Demo
             </Button>
           </div>
 
           {/* Dashboard Mockup */}
-          <div className="relative max-w-5xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
-            <div className="glass-card-strong rounded-3xl p-8 glow-effect">
-              <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="relative max-w-5xl mx-auto animate-fade-in px-4" style={{ animationDelay: "0.4s" }}>
+            <div className="glass-card-strong rounded-2xl sm:rounded-3xl p-4 sm:p-8 glow-effect">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
                 {[
                   { label: "Total Customers", value: stats.totalCustomers },
                   { label: "Active Segments", value: stats.activeSegments },
                   { label: "Avg. Transaction", value: stats.avgTransaction },
                 ].map((stat, i) => (
-                  <div key={i} className="glass-card p-4 rounded-xl">
-                    <div className="text-sm text-muted-foreground mb-1">{stat.label}</div>
-                    <div className="text-2xl font-bold gradient-text">{stat.value}</div>
+                  <div key={i} className="glass-card p-3 sm:p-4 rounded-xl">
+                    <div className="text-xs sm:text-sm text-muted-foreground mb-1">{stat.label}</div>
+                    <div className="text-xl sm:text-2xl font-bold gradient-text">{stat.value}</div>
                   </div>
                 ))}
               </div>
-              <div className="h-64 glass-card rounded-xl flex items-center justify-center">
+              <div className="h-48 sm:h-64 glass-card rounded-xl flex items-center justify-center">
                 <div className="text-center">
-                  <BarChart3 className="w-16 h-16 mx-auto mb-4 text-primary animate-pulse" />
-                  <p className="text-muted-foreground">
+                  <BarChart3 className="w-12 sm:w-16 h-12 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary animate-pulse" />
+                  <p className="text-sm sm:text-base text-muted-foreground">
                     {isLoggedIn ? "Your Analytics Dashboard" : "Beautiful Analytics Dashboard"}
                   </p>
                 </div>
@@ -144,18 +144,18 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-32 relative">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-bold mb-4">
+      <section className="py-16 sm:py-32 relative">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-20">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-3 sm:mb-4">
               <span className="gradient-text">Keunggulan Platform</span>
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-base sm:text-xl text-muted-foreground px-4">
               Insight pelanggan yang powerful, tanpa kompleksitas
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 icon: Target,
@@ -175,13 +175,13 @@ const Landing = () => {
             ].map((feature, i) => (
               <div
                 key={i}
-                className="glass-card-strong p-8 rounded-2xl hover:glow-effect transition-all duration-300 group"
+                className="glass-card-strong p-6 sm:p-8 rounded-2xl hover:glow-effect transition-all duration-300 group"
               >
-                <div className="w-16 h-16 rounded-xl bg-gradient-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <feature.icon className="w-8 h-8" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-primary flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
+                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{feature.title}</h3>
+                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
               </div>
             ))}
           </div>
