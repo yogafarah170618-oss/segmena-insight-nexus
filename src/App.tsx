@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Segments from "./pages/Segments";
 import Auth from "./pages/Auth";
 import VerificationSuccess from "./pages/VerificationSuccess";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
         <Routes>
           <Route path="/auth" element={<Auth />} />
           <Route path="/verification-success" element={<VerificationSuccess />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="*" element={
             <Layout>
               <Routes>
