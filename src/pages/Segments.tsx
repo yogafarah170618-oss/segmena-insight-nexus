@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 
 interface SegmentCustomer {
   customer_id: string;
+  customer_name?: string;
   total_transactions: number;
   total_spend: number;
   avg_spend: number;
@@ -52,6 +53,7 @@ const Segments = () => {
         return;
       }
 
+      // Fetch segments
       const { data, error } = await supabase
         .from('customer_segments')
         .select('*')
@@ -66,8 +68,27 @@ const Segments = () => {
         return;
       }
 
+      // Fetch customer names from transactions
+      const customerIds = data.map(c => c.customer_id);
+      const { data: transData } = await supabase
+        .from('transactions')
+        .select('customer_id, customer_name')
+        .eq('user_id', session.user.id)
+        .in('customer_id', customerIds)
+        .not('customer_name', 'is', null)
+        .order('created_at', { ascending: false });
+
+      // Create a map of customer_id to name (take most recent name if multiple)
+      const nameMap = new Map<string, string>();
+      transData?.forEach(t => {
+        if (t.customer_name && !nameMap.has(t.customer_id)) {
+          nameMap.set(t.customer_id, t.customer_name);
+        }
+      });
+
       const customerData: SegmentCustomer[] = data.map(c => ({
         customer_id: c.customer_id,
+        customer_name: nameMap.get(c.customer_id) || undefined,
         total_transactions: c.total_transactions,
         total_spend: parseFloat(c.total_spend.toString()),
         avg_spend: parseFloat(c.avg_spend.toString()),
@@ -225,6 +246,7 @@ const Segments = () => {
               <thead>
                 <tr className="border-b border-border">
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Customer ID</th>
+                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Name</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Transactions</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Total Spend</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Avg Spend</th>
@@ -242,6 +264,13 @@ const Segments = () => {
                       <Badge variant="outline" className="font-mono">
                         {customer.customer_id}
                       </Badge>
+                    </td>
+                    <td className="p-4">
+                      {customer.customer_name ? (
+                        <span className="font-medium">{customer.customer_name}</span>
+                      ) : (
+                        <span className="text-muted-foreground italic">-</span>
+                      )}
                     </td>
                     <td className="p-4">{customer.total_transactions}</td>
                     <td className="p-4 font-semibold text-secondary">{formatCurrency(customer.total_spend)}</td>

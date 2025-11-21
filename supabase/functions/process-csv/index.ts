@@ -8,6 +8,7 @@ const corsHeaders = {
 
 interface Transaction {
   customer_id: string;
+  customer_name?: string;
   transaction_date: string;
   transaction_amount: number;
 }
@@ -61,11 +62,14 @@ serve(async (req) => {
 
     const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
     const requiredHeaders = ['customer_id', 'transaction_date', 'transaction_amount'];
+    const optionalHeaders = ['customer_name'];
     
     const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
     if (missingHeaders.length > 0) {
       throw new Error(`Missing required columns: ${missingHeaders.join(', ')}`);
     }
+
+    const hasCustomerName = headers.includes('customer_name');
 
     const transactions: Transaction[] = [];
     
@@ -80,6 +84,7 @@ serve(async (req) => {
 
       transactions.push({
         customer_id: row.customer_id,
+        customer_name: hasCustomerName ? (row.customer_name || undefined) : undefined,
         transaction_date: row.transaction_date,
         transaction_amount: parseFloat(row.transaction_amount),
       });
@@ -97,8 +102,11 @@ serve(async (req) => {
 
     // Insert transactions
     const transactionsWithUserId = transactions.map(t => ({
-      ...t,
       user_id: user.id,
+      customer_id: t.customer_id,
+      customer_name: t.customer_name || null,
+      transaction_date: t.transaction_date,
+      transaction_amount: t.transaction_amount,
     }));
 
     const { error: insertError } = await supabase
