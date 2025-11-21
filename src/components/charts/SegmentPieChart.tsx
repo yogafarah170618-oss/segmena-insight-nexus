@@ -14,8 +14,8 @@ export const SegmentPieChart = ({ data }: SegmentPieChartProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="glass-card-strong p-4 border border-border rounded-lg">
-          <p className="text-sm font-semibold mb-1">{payload[0].name}</p>
-          <p className="text-sm text-primary">
+          <p className="text-sm font-semibold mb-1 text-foreground">{payload[0].name}</p>
+          <p className="text-sm text-foreground font-medium">
             {payload[0].value} customers ({((payload[0].value / data.reduce((sum, d) => sum + d.value, 0)) * 100).toFixed(1)}%)
           </p>
         </div>
