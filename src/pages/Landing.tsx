@@ -15,6 +15,23 @@ const Landing = () => {
 
   useEffect(() => {
     checkAuthAndLoadData();
+
+    // Listen for auth changes (especially logout)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT') {
+        // Reset to dummy data
+        setIsLoggedIn(false);
+        setStats({
+          totalCustomers: "1,247",
+          activeSegments: "4",
+          avgTransaction: "Rp 247K",
+        });
+      } else if (event === 'SIGNED_IN') {
+        checkAuthAndLoadData();
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const checkAuthAndLoadData = async () => {
