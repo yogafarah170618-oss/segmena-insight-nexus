@@ -11,6 +11,7 @@ import Segments from "./pages/Segments";
 import Auth from "./pages/Auth";
 import VerificationSuccess from "./pages/VerificationSuccess";
 import ResetPassword from "./pages/ResetPassword";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
                 <Route path="/upload" element={<Upload />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/segments" element={<Segments />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Layout>

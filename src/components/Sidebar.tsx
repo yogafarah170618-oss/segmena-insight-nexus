@@ -1,4 +1,4 @@
-import { Home, Upload, BarChart3, Target, Menu } from "lucide-react";
+import { Home, Upload, BarChart3, Target, Menu, User } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { cn } from "@/lib/utils";
 import segmenaLogo from "@/assets/segmena-logo.png";
@@ -11,6 +11,7 @@ const navItems = [
   { title: "Upload Data", icon: Upload, path: "/upload" },
   { title: "Dashboard", icon: BarChart3, path: "/dashboard" },
   { title: "Segments", icon: Target, path: "/segments" },
+  { title: "Profile", icon: User, path: "/profile" },
 ];
 
 const SidebarContent = () => (
