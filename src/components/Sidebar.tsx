@@ -16,7 +16,7 @@ export const Sidebar = () => {
       <div className="flex flex-col items-center py-8 space-y-8">
         {/* Logo */}
         <NavLink to="/" className="mb-4">
-          <img src={segmenaLogo} alt="Segmena" className="w-12 h-12 object-contain" />
+          <img src={segmenaLogo} alt="Segmena" className="w-16 h-16 object-contain" />
         </NavLink>
 
         {/* Navigation */}
