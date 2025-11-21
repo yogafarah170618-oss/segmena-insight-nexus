@@ -4,6 +4,9 @@ import { Users, ShoppingCart, TrendingUp, Target } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { RevenueChart } from "@/components/charts/RevenueChart";
+import { SegmentPieChart } from "@/components/charts/SegmentPieChart";
+import { CustomerGrowthChart } from "@/components/charts/CustomerGrowthChart";
 
 interface SegmentData {
   segment_name: string;
@@ -30,6 +33,9 @@ const Dashboard = () => {
     totalRevenue: 0,
   });
   const [segments, setSegments] = useState<SegmentData[]>([]);
+  const [revenueData, setRevenueData] = useState<Array<{ date: string; revenue: number; transactions: number }>>([]);
+  const [customerGrowthData, setCustomerGrowthData] = useState<Array<{ date: string; newCustomers: number; totalCustomers: number }>>([]);
+  const [segmentPieData, setSegmentPieData] = useState<Array<{ name: string; value: number; color: string }>>([]);
 
   useEffect(() => {
     loadDashboardData();
@@ -104,12 +110,100 @@ const Dashboard = () => {
       }));
 
       setSegments(segmentArray.sort((a, b) => b.total_revenue - a.total_revenue));
+
+      // Prepare chart data
+      await prepareChartData(transactions, segmentData);
       
     } catch (error: any) {
       console.error('Error loading dashboard:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const prepareChartData = async (transactions: any[], segments: any[]) => {
+    // Revenue trend by month
+    const monthlyData = new Map<string, { revenue: number; transactions: number }>();
+    
+    transactions.forEach(t => {
+      const date = new Date(t.transaction_date);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      
+      const existing = monthlyData.get(monthKey) || { revenue: 0, transactions: 0 };
+      existing.revenue += parseFloat(t.transaction_amount.toString());
+      existing.transactions += 1;
+      monthlyData.set(monthKey, existing);
+    });
+
+    const revenueChartData = Array.from(monthlyData.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .slice(-6) // Last 6 months
+      .map(([date, data]) => ({
+        date: new Date(date + '-01').toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }),
+        revenue: data.revenue,
+        transactions: data.transactions,
+      }));
+
+    setRevenueData(revenueChartData);
+
+    // Customer growth by month
+    const customersByMonth = new Map<string, Set<string>>();
+    const sortedTransactions = [...transactions].sort((a, b) => 
+      new Date(a.transaction_date).getTime() - new Date(b.transaction_date).getTime()
+    );
+
+    const allCustomers = new Set<string>();
+    sortedTransactions.forEach(t => {
+      const date = new Date(t.transaction_date);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      
+      if (!customersByMonth.has(monthKey)) {
+        customersByMonth.set(monthKey, new Set());
+      }
+      customersByMonth.get(monthKey)!.add(t.customer_id);
+      allCustomers.add(t.customer_id);
+    });
+
+    let cumulativeCustomers = 0;
+    const growthChartData = Array.from(customersByMonth.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .slice(-6)
+      .map(([date, customers]) => {
+        cumulativeCustomers += customers.size;
+        return {
+          date: new Date(date + '-01').toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }),
+          newCustomers: customers.size,
+          totalCustomers: cumulativeCustomers,
+        };
+      });
+
+    setCustomerGrowthData(growthChartData);
+
+    // Segment pie chart
+    const segmentColors: Record<string, string> = {
+      'Champions': 'hsl(142, 76%, 36%)',
+      'Loyal Customers': 'hsl(221, 83%, 53%)',
+      'At Risk': 'hsl(25, 95%, 53%)',
+      'Lost': 'hsl(0, 84%, 60%)',
+      'Potential Loyalists': 'hsl(271, 91%, 65%)',
+      'Recent Customers': 'hsl(187, 85%, 43%)',
+      'Cant Lose Them': 'hsl(45, 93%, 47%)',
+      'Big Spenders': 'hsl(239, 84%, 67%)',
+      'Need Attention': 'hsl(215, 20%, 65%)',
+    };
+
+    const segmentGroups = new Map<string, number>();
+    segments?.forEach(seg => {
+      segmentGroups.set(seg.segment_name, (segmentGroups.get(seg.segment_name) || 0) + 1);
+    });
+
+    const pieData = Array.from(segmentGroups.entries()).map(([name, count]) => ({
+      name,
+      value: count,
+      color: segmentColors[name] || 'hsl(215, 20%, 65%)',
+    }));
+
+    setSegmentPieData(pieData);
   };
 
   const formatCurrency = (amount: number) => {
@@ -233,6 +327,16 @@ const Dashboard = () => {
           {formatCurrency(metrics.totalRevenue)}
         </div>
       </Card>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RevenueChart data={revenueData} />
+        <CustomerGrowthChart data={customerGrowthData} />
+      </div>
+
+      {segmentPieData.length > 0 && (
+        <SegmentPieChart data={segmentPieData} />
+      )}
     </div>
   );
 };
