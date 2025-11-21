@@ -167,21 +167,37 @@ const Upload = () => {
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 rounded-full bg-primary mt-2" />
               <div>
-                <strong className="text-foreground">customer_id:</strong> ID unik pelanggan
+                <strong className="text-foreground">customer_id:</strong> ID unik pelanggan <span className="text-red-500">(Wajib)</span>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 rounded-full bg-primary mt-2" />
               <div>
-                <strong className="text-foreground">transaction_date:</strong> Tanggal transaksi (YYYY-MM-DD)
+                <strong className="text-foreground">transaction_date:</strong> Tanggal transaksi (YYYY-MM-DD) <span className="text-red-500">(Wajib)</span>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <div className="w-2 h-2 rounded-full bg-primary mt-2" />
               <div>
-                <strong className="text-foreground">transaction_amount:</strong> Nominal transaksi (angka)
+                <strong className="text-foreground">transaction_amount:</strong> Nominal transaksi (angka) <span className="text-red-500">(Wajib)</span>
               </div>
             </div>
+            <div className="flex items-start gap-3">
+              <div className="w-2 h-2 rounded-full bg-secondary mt-2" />
+              <div>
+                <strong className="text-foreground">customer_name:</strong> Nama pelanggan <span className="text-muted-foreground">(Opsional)</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+            <p className="text-sm font-semibold mb-2">Contoh format CSV:</p>
+            <code className="text-xs block whitespace-pre font-mono">
+customer_id,transaction_date,transaction_amount,customer_name{'\n'}
+CUST001,2024-01-15,500000,Ahmad Wijaya{'\n'}
+CUST002,2024-01-16,750000,{'\n'}
+CUST003,2024-01-17,250000,Siti Nurhaliza
+            </code>
           </div>
         </div>
 
