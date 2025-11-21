@@ -46,7 +46,49 @@ const Dashboard = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        navigate("/auth");
+        // Show dummy data for preview
+        setMetrics({
+          totalCustomers: 1247,
+          totalTransactions: 3842,
+          avgSpend: 247000,
+          totalRevenue: 308149000,
+        });
+
+        setSegments([
+          { segment_name: 'Champions', customer_count: 187, percentage: 15, avg_spend: 520000, total_revenue: 97240000 },
+          { segment_name: 'Loyal Customers', customer_count: 312, percentage: 25, avg_spend: 310000, total_revenue: 96720000 },
+          { segment_name: 'At Risk', customer_count: 249, percentage: 20, avg_spend: 180000, total_revenue: 44820000 },
+          { segment_name: 'Recent Customers', customer_count: 374, percentage: 30, avg_spend: 150000, total_revenue: 56100000 },
+          { segment_name: 'Lost', customer_count: 125, percentage: 10, avg_spend: 110000, total_revenue: 13750000 },
+        ]);
+
+        setRevenueData([
+          { date: 'Jun 2024', revenue: 45000000, transactions: 580 },
+          { date: 'Jul 2024', revenue: 48500000, transactions: 620 },
+          { date: 'Aug 2024', revenue: 52000000, transactions: 670 },
+          { date: 'Sep 2024', revenue: 49800000, transactions: 640 },
+          { date: 'Oct 2024', revenue: 54200000, transactions: 695 },
+          { date: 'Nov 2024', revenue: 58600000, transactions: 737 },
+        ]);
+
+        setCustomerGrowthData([
+          { date: 'Jun 2024', newCustomers: 145, totalCustomers: 825 },
+          { date: 'Jul 2024', newCustomers: 167, totalCustomers: 992 },
+          { date: 'Aug 2024', newCustomers: 183, totalCustomers: 1175 },
+          { date: 'Sep 2024', newCustomers: 156, totalCustomers: 1331 },
+          { date: 'Oct 2024', newCustomers: 178, totalCustomers: 1509 },
+          { date: 'Nov 2024', newCustomers: 194, totalCustomers: 1703 },
+        ]);
+
+        setSegmentPieData([
+          { name: 'Champions', value: 187, color: 'hsl(142, 76%, 36%)' },
+          { name: 'Loyal Customers', value: 312, color: 'hsl(221, 83%, 53%)' },
+          { name: 'At Risk', value: 249, color: 'hsl(25, 95%, 53%)' },
+          { name: 'Recent Customers', value: 374, color: 'hsl(187, 85%, 43%)' },
+          { name: 'Lost', value: 125, color: 'hsl(0, 84%, 60%)' },
+        ]);
+
+        setLoading(false);
         return;
       }
 
