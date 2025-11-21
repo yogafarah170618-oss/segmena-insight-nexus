@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload as UploadIcon, FileText, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Upload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Silakan login terlebih dahulu");
+      navigate("/auth");
+    }
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -41,17 +54,44 @@ const Upload = () => {
     }
   };
 
-  const handleProcess = () => {
+  const handleProcess = async () => {
     if (!file) {
       toast.error("Please upload a file first");
       return;
     }
+    
     setIsProcessing(true);
-    setTimeout(() => {
-      setIsProcessing(false);
-      toast.success("Data processed successfully!");
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        toast.error("Silakan login terlebih dahulu");
+        navigate("/auth");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const { data, error } = await supabase.functions.invoke('process-csv', {
+        body: formData,
+      });
+
+      if (error) throw error;
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      toast.success(`Berhasil! ${data.customers} customer di-segmentasi dari ${data.message}`);
       navigate("/dashboard");
-    }, 2000);
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      toast.error(error.message || "Gagal memproses file. Pastikan format CSV sesuai.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (

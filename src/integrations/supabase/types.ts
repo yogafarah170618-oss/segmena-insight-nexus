@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      customer_segments: {
+        Row: {
+          avg_spend: number
+          created_at: string
+          customer_id: string
+          frequency_score: number
+          id: string
+          last_transaction_date: string
+          monetary_score: number
+          recency_score: number
+          segment_name: string
+          total_spend: number
+          total_transactions: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avg_spend: number
+          created_at?: string
+          customer_id: string
+          frequency_score: number
+          id?: string
+          last_transaction_date: string
+          monetary_score: number
+          recency_score: number
+          segment_name: string
+          total_spend: number
+          total_transactions: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avg_spend?: number
+          created_at?: string
+          customer_id?: string
+          frequency_score?: number
+          id?: string
+          last_transaction_date?: string
+          monetary_score?: number
+          recency_score?: number
+          segment_name?: string
+          total_spend?: number
+          total_transactions?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_segments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -37,6 +93,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      transactions: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          transaction_amount: number
+          transaction_date: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          transaction_amount: number
+          transaction_date: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          transaction_amount?: number
+          transaction_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
