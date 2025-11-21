@@ -1,6 +1,7 @@
 import { Home, Upload, BarChart3, Target } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { cn } from "@/lib/utils";
+import segmenaLogo from "@/assets/segmena-logo.png";
 
 const navItems = [
   { title: "Home", icon: Home, path: "/" },
@@ -15,9 +16,7 @@ export const Sidebar = () => {
       <div className="flex flex-col items-center py-8 space-y-8">
         {/* Logo */}
         <NavLink to="/" className="mb-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center font-bold text-lg glow-effect">
-            S
-          </div>
+          <img src={segmenaLogo} alt="Segmena" className="w-12 h-12 object-contain" />
         </NavLink>
 
         {/* Navigation */}
