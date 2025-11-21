@@ -48,7 +48,7 @@ const Auth = () => {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/verification-success`,
           data: {
             full_name: name,
           }
@@ -59,7 +59,7 @@ const Auth = () => {
 
       toast({
         title: "Berhasil mendaftar!",
-        description: "Silakan cek email Anda untuk verifikasi akun. Setelah verifikasi, Anda akan otomatis login.",
+        description: "Silakan cek email Anda untuk verifikasi akun. Link verifikasi telah dikirim.",
       });
       
       // Reset form
