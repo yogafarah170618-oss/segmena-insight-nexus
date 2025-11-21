@@ -14,11 +14,11 @@ export const CustomerGrowthChart = ({ data }: CustomerGrowthChartProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="glass-card-strong p-4 border border-border rounded-lg">
-          <p className="text-sm font-semibold mb-2">{payload[0].payload.date}</p>
-          <p className="text-sm text-primary">
+          <p className="text-sm font-semibold mb-2 text-foreground">{payload[0].payload.date}</p>
+          <p className="text-sm text-foreground font-medium">
             Customer Baru: {payload[0].value}
           </p>
-          <p className="text-sm text-secondary">
+          <p className="text-sm text-foreground font-medium">
             Total Customer: {payload[1].value}
           </p>
         </div>
