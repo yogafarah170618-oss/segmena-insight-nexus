@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowLeft } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -108,6 +108,14 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed top-4 left-4 z-50"
+        onClick={() => navigate("/")}
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </Button>
       <Card className="w-full max-w-md glass-card-strong">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Segmena</CardTitle>
