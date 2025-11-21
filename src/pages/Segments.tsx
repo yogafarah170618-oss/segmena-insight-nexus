@@ -49,7 +49,45 @@ const Segments = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        navigate("/auth");
+        // Show dummy data for preview
+        const dummyData: Record<string, SegmentCustomer[]> = {
+          'Champions': [
+            { customer_id: 'CUST-001', customer_name: 'Budi Santoso', total_transactions: 45, total_spend: 2250000, avg_spend: 50000, last_transaction_date: '2024-11-15', recency_score: 5, frequency_score: 5, monetary_score: 5 },
+            { customer_id: 'CUST-002', customer_name: 'Siti Rahayu', total_transactions: 38, total_spend: 1900000, avg_spend: 50000, last_transaction_date: '2024-11-14', recency_score: 5, frequency_score: 5, monetary_score: 4 },
+            { customer_id: 'CUST-003', customer_name: 'Ahmad Wijaya', total_transactions: 42, total_spend: 2100000, avg_spend: 50000, last_transaction_date: '2024-11-13', recency_score: 5, frequency_score: 5, monetary_score: 5 },
+          ],
+          'Loyal Customers': [
+            { customer_id: 'CUST-101', customer_name: 'Dewi Lestari', total_transactions: 28, total_spend: 1120000, avg_spend: 40000, last_transaction_date: '2024-11-10', recency_score: 4, frequency_score: 4, monetary_score: 4 },
+            { customer_id: 'CUST-102', customer_name: 'Rudi Hartono', total_transactions: 25, total_spend: 1000000, avg_spend: 40000, last_transaction_date: '2024-11-08', recency_score: 4, frequency_score: 4, monetary_score: 4 },
+          ],
+          'At Risk': [
+            { customer_id: 'CUST-201', customer_name: 'Linda Kusuma', total_transactions: 15, total_spend: 525000, avg_spend: 35000, last_transaction_date: '2024-09-20', recency_score: 2, frequency_score: 3, monetary_score: 3 },
+            { customer_id: 'CUST-202', customer_name: 'Agus Pratama', total_transactions: 12, total_spend: 420000, avg_spend: 35000, last_transaction_date: '2024-09-15', recency_score: 2, frequency_score: 3, monetary_score: 3 },
+          ],
+          'Recent Customers': [
+            { customer_id: 'CUST-301', customer_name: 'Rina Wati', total_transactions: 3, total_spend: 120000, avg_spend: 40000, last_transaction_date: '2024-11-16', recency_score: 5, frequency_score: 2, monetary_score: 2 },
+            { customer_id: 'CUST-302', customer_name: 'Bambang Susilo', total_transactions: 2, total_spend: 80000, avg_spend: 40000, last_transaction_date: '2024-11-15', recency_score: 5, frequency_score: 1, monetary_score: 2 },
+          ],
+          'Lost': [
+            { customer_id: 'CUST-401', customer_name: 'Yuni Astuti', total_transactions: 8, total_spend: 320000, avg_spend: 40000, last_transaction_date: '2024-06-10', recency_score: 1, frequency_score: 2, monetary_score: 3 },
+            { customer_id: 'CUST-402', customer_name: 'Hendra Gunawan', total_transactions: 6, total_spend: 240000, avg_spend: 40000, last_transaction_date: '2024-05-25', recency_score: 1, frequency_score: 2, monetary_score: 2 },
+          ],
+        };
+
+        const dummyCustomers = dummyData[segmentName] || [];
+        setCustomers(dummyCustomers);
+
+        const totalRevenue = dummyCustomers.reduce((sum, c) => sum + c.total_spend, 0);
+        const totalTransactions = dummyCustomers.reduce((sum, c) => sum + c.total_transactions, 0);
+
+        setStats({
+          totalCustomers: dummyCustomers.length,
+          avgSpend: dummyCustomers.length > 0 ? totalRevenue / dummyCustomers.length : 0,
+          avgFrequency: dummyCustomers.length > 0 ? totalTransactions / dummyCustomers.length : 0,
+          totalRevenue: totalRevenue,
+        });
+
+        setLoading(false);
         return;
       }
 
