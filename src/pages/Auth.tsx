@@ -146,13 +146,16 @@ const Auth = () => {
       >
         <ArrowLeft className="h-5 w-5" />
       </Button>
-      <Card className="w-full max-w-md glass-card-strong">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Segmena</CardTitle>
-          <CardDescription className="text-center">
-            Platform Customer Intelligence
-          </CardDescription>
-        </CardHeader>
+      <div className="w-full max-w-md">
+        <h1 className="text-5xl md:text-6xl font-bold mb-8 text-center animate-fade-in">
+          <span className="gradient-text">Segmena</span>
+        </h1>
+        <Card className="glass-card-strong">
+          <CardHeader className="space-y-1">
+            <CardDescription className="text-center">
+              Platform Customer Intelligence
+            </CardDescription>
+          </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-4">
@@ -358,6 +361,7 @@ const Auth = () => {
           </Tabs>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 };
