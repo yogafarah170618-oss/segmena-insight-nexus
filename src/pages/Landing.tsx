@@ -1,9 +1,65 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Target, Zap, TrendingUp, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    totalCustomers: "1,247",
+    activeSegments: "4",
+    avgTransaction: "Rp 247K",
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    checkAuthAndLoadData();
+  }, []);
+
+  const checkAuthAndLoadData = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        setIsLoggedIn(false);
+        return;
+      }
+
+      setIsLoggedIn(true);
+
+      // Fetch real data
+      const { data: transactions } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('user_id', session.user.id);
+
+      const { data: segments } = await supabase
+        .from('customer_segments')
+        .select('segment_name')
+        .eq('user_id', session.user.id);
+
+      if (transactions && transactions.length > 0) {
+        const uniqueCustomers = new Set(transactions.map(t => t.customer_id)).size;
+        const uniqueSegments = new Set(segments?.map(s => s.segment_name) || []).size;
+        const totalRevenue = transactions.reduce((sum, t) => sum + parseFloat(t.transaction_amount.toString()), 0);
+        const avgTransaction = totalRevenue / transactions.length;
+
+        setStats({
+          totalCustomers: uniqueCustomers.toLocaleString('id-ID'),
+          activeSegments: uniqueSegments.toString(),
+          avgTransaction: new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).format(avgTransaction),
+        });
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -54,9 +110,9 @@ const Landing = () => {
             <div className="glass-card-strong rounded-3xl p-8 glow-effect">
               <div className="grid grid-cols-3 gap-4 mb-6">
                 {[
-                  { label: "Total Customers", value: "1,247" },
-                  { label: "Active Segments", value: "4" },
-                  { label: "Avg. Transaction", value: "Rp 247K" },
+                  { label: "Total Customers", value: stats.totalCustomers },
+                  { label: "Active Segments", value: stats.activeSegments },
+                  { label: "Avg. Transaction", value: stats.avgTransaction },
                 ].map((stat, i) => (
                   <div key={i} className="glass-card p-4 rounded-xl">
                     <div className="text-sm text-muted-foreground mb-1">{stat.label}</div>
@@ -67,7 +123,9 @@ const Landing = () => {
               <div className="h-64 glass-card rounded-xl flex items-center justify-center">
                 <div className="text-center">
                   <BarChart3 className="w-16 h-16 mx-auto mb-4 text-primary animate-pulse" />
-                  <p className="text-muted-foreground">Beautiful Analytics Dashboard</p>
+                  <p className="text-muted-foreground">
+                    {isLoggedIn ? "Your Analytics Dashboard" : "Beautiful Analytics Dashboard"}
+                  </p>
                 </div>
               </div>
             </div>
