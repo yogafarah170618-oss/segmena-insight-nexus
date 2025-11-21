@@ -83,12 +83,7 @@ const Landing = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full glass-card mb-6 sm:mb-8 animate-fade-in">
-            <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-primary" />
-            <span className="text-xs sm:text-sm">Smart Customer Intelligence</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-4 sm:mb-6 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-4 sm:mb-6 animate-fade-in">
             <span className="gradient-text">Segmena</span>
           </h1>
 
