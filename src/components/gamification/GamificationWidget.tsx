@@ -8,14 +8,36 @@ import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
 export const GamificationWidget = () => {
-  const { gamification, missions } = useGamification();
+  const { gamification, missions, loading } = useGamification();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  if (!gamification) return null;
+  // Show demo data if not logged in
+  const demoGamification = {
+    totalPoints: 850,
+    level: 3,
+    segmentsExplored: 4,
+    insightsCreated: 2,
+    segmentsCompared: 1,
+    visualizationsUsed: 3,
+    filtersApplied: 5,
+    currentStreak: 3,
+    longestStreak: 7,
+  };
 
-  const activeMissions = missions.filter(m => !m.isCompleted);
-  const completedMissions = missions.filter(m => m.isCompleted);
-  const overallProgress = (completedMissions.length / missions.length) * 100;
+  const demoMissions = [
+    { key: 'analyze_first_segment', name: 'Analyze First Segment', description: 'Explore your first customer segment', isCompleted: true },
+    { key: 'compare_segments', name: 'Compare Two Segments', description: 'Compare different customer groups', isCompleted: false },
+    { key: 'save_first_insight', name: 'Save First Insight', description: 'Create and save your first insight report', isCompleted: false },
+  ];
+
+  const currentGamification = gamification || demoGamification;
+  const currentMissions = missions.length > 0 ? missions : demoMissions;
+
+  if (loading) return null;
+
+  const activeMissions = currentMissions.filter(m => !m.isCompleted);
+  const completedMissions = currentMissions.filter(m => m.isCompleted);
+  const overallProgress = (completedMissions.length / currentMissions.length) * 100;
 
   return (
     <Card className={cn(
@@ -29,12 +51,12 @@ export const GamificationWidget = () => {
           </div>
           <div>
             <div className="text-sm text-muted-foreground">Your Progress</div>
-            <div className="text-xl font-bold">Level {gamification.level}</div>
+            <div className="text-xl font-bold">Level {currentGamification.level}</div>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="secondary" className="text-xs">
-            {gamification.totalPoints} pts
+            {currentGamification.totalPoints} pts
           </Badge>
           {isExpanded ? (
             <ChevronUp className="w-5 h-5 text-muted-foreground" />
@@ -51,7 +73,7 @@ export const GamificationWidget = () => {
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Overall Progress</span>
               <span className="text-sm text-muted-foreground">
-                {completedMissions.length}/{missions.length} missions
+                {completedMissions.length}/{currentMissions.length} missions
               </span>
             </div>
             <Progress value={overallProgress} className="h-2" />
@@ -81,11 +103,11 @@ export const GamificationWidget = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-3 pt-3 border-t border-border">
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{gamification.segmentsExplored}</div>
+              <div className="text-2xl font-bold text-primary">{currentGamification.segmentsExplored}</div>
               <div className="text-xs text-muted-foreground">Segments</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-primary">{gamification.visualizationsUsed}</div>
+              <div className="text-2xl font-bold text-primary">{currentGamification.visualizationsUsed}</div>
               <div className="text-xs text-muted-foreground">Charts</div>
             </div>
             <div className="text-center">
