@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
-import { useGamification } from "@/contexts/GamificationContext";
 
 interface SegmentPieChartProps {
   data: Array<{
@@ -12,14 +10,6 @@ interface SegmentPieChartProps {
 }
 
 export const SegmentPieChart = ({ data }: SegmentPieChartProps) => {
-  const { trackActivity } = useGamification();
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      trackActivity('visualization_used', { chart: 'segment_distribution' });
-    }
-  }, []);
-
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (

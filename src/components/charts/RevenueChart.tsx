@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { useGamification } from "@/contexts/GamificationContext";
 
 interface RevenueChartProps {
   data: Array<{
@@ -12,14 +10,6 @@ interface RevenueChartProps {
 }
 
 export const RevenueChart = ({ data }: RevenueChartProps) => {
-  const { trackActivity } = useGamification();
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      trackActivity('visualization_used', { chart: 'revenue_trend' });
-    }
-  }, []);
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',

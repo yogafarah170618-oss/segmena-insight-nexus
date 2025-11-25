@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
-import { GamificationProvider } from "./contexts/GamificationContext";
 import Landing from "./pages/Landing";
 import Upload from "./pages/Upload";
 import Dashboard from "./pages/Dashboard";
@@ -20,29 +19,27 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <GamificationProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/verification-success" element={<VerificationSuccess />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="*" element={
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Landing />} />
-                  <Route path="/upload" element={<Upload />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/segments" element={<Segments />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Layout>
-            } />
-          </Routes>
-        </BrowserRouter>
-      </GamificationProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/verification-success" element={<VerificationSuccess />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="*" element={
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/upload" element={<Upload />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/segments" element={<Segments />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          } />
+        </Routes>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
