@@ -1,7 +1,5 @@
-import { useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { useGamification } from "@/contexts/GamificationContext";
 
 interface CustomerGrowthChartProps {
   data: Array<{
@@ -12,14 +10,6 @@ interface CustomerGrowthChartProps {
 }
 
 export const CustomerGrowthChart = ({ data }: CustomerGrowthChartProps) => {
-  const { trackActivity } = useGamification();
-
-  useEffect(() => {
-    if (data && data.length > 0) {
-      trackActivity('visualization_used', { chart: 'customer_growth' });
-    }
-  }, []);
-
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
