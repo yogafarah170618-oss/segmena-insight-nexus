@@ -6,6 +6,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { useGamification } from "@/contexts/GamificationContext";
+import { useGamificationTracking } from "@/hooks/useGamificationTracking";
 
 interface SegmentCustomer {
   customer_id: string;
@@ -30,6 +32,8 @@ const Segments = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const segmentName = searchParams.get('segment') || 'Champions';
+  const { trackActivity, completeMission } = useGamification();
+  useGamificationTracking();
   
   const [loading, setLoading] = useState(true);
   const [customers, setCustomers] = useState<SegmentCustomer[]>([]);
@@ -42,6 +46,14 @@ const Segments = () => {
 
   useEffect(() => {
     loadSegmentData();
+  }, [segmentName]);
+
+  useEffect(() => {
+    // Track segment exploration
+    if (segmentName) {
+      trackActivity('segment_explored', { segment: segmentName });
+      completeMission('analyze_first_segment');
+    }
   }, [segmentName]);
 
   const loadSegmentData = async () => {

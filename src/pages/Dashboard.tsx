@@ -7,6 +7,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RevenueChart } from "@/components/charts/RevenueChart";
 import { SegmentPieChart } from "@/components/charts/SegmentPieChart";
 import { CustomerGrowthChart } from "@/components/charts/CustomerGrowthChart";
+import { GamificationDashboard } from "@/components/gamification/GamificationDashboard";
+import { GamificationWidget } from "@/components/gamification/GamificationWidget";
+import { useGamification } from "@/contexts/GamificationContext";
+import { useGamificationTracking } from "@/hooks/useGamificationTracking";
 
 interface SegmentData {
   segment_name: string;
@@ -25,6 +29,8 @@ interface DashboardMetrics {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { trackActivity } = useGamification();
+  useGamificationTracking();
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState<DashboardMetrics>({
     totalCustomers: 0,
@@ -305,11 +311,16 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen p-8 space-y-8">
-      <div>
-        <h1 className="text-5xl font-bold mb-2">
-          <span className="gradient-text">Analytics Dashboard</span>
-        </h1>
-        <p className="text-xl text-muted-foreground">Real-time customer intelligence insights</p>
+      <div className="flex items-start justify-between gap-6">
+        <div>
+          <h1 className="text-5xl font-bold mb-2">
+            <span className="gradient-text">Analytics Dashboard</span>
+          </h1>
+          <p className="text-xl text-muted-foreground">Real-time customer intelligence insights</p>
+        </div>
+        <div className="w-full max-w-md">
+          <GamificationWidget />
+        </div>
       </div>
 
       {/* Metrics Cards */}
@@ -379,6 +390,12 @@ const Dashboard = () => {
       {segmentPieData.length > 0 && (
         <SegmentPieChart data={segmentPieData} />
       )}
+
+      {/* Gamification Dashboard */}
+      <div>
+        <h2 className="text-3xl font-bold mb-6">Your Progress</h2>
+        <GamificationDashboard />
+      </div>
     </div>
   );
 };
