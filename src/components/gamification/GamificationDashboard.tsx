@@ -42,6 +42,29 @@ const ACHIEVEMENT_DEFINITIONS = [
 export const GamificationDashboard = () => {
   const { gamification, achievements, missions, loading } = useGamification();
 
+  // Demo data for preview when not logged in
+  const demoGamification = {
+    totalPoints: 850,
+    level: 3,
+    segmentsExplored: 4,
+    insightsCreated: 2,
+    segmentsCompared: 1,
+    visualizationsUsed: 3,
+    filtersApplied: 5,
+    currentStreak: 3,
+    longestStreak: 7,
+  };
+
+  const demoMissions = [
+    { key: 'analyze_first_segment', name: 'Analyze First Segment', description: 'Explore your first customer segment', isCompleted: true },
+    { key: 'compare_segments', name: 'Compare Two Segments', description: 'Compare different customer groups', isCompleted: false },
+    { key: 'save_first_insight', name: 'Save First Insight', description: 'Create and save your first insight report', isCompleted: false },
+    { key: 'apply_first_filter', name: 'Apply Your First Filter', description: 'Use filters to refine your data', isCompleted: false },
+  ];
+
+  const currentGamification = gamification || demoGamification;
+  const currentMissions = missions.length > 0 ? missions : demoMissions;
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -51,7 +74,8 @@ export const GamificationDashboard = () => {
     );
   }
 
-  if (!gamification) return null;
+  const activeMissions = currentMissions.filter((m) => !m.isCompleted);
+  const completedMissions = currentMissions.filter((m) => m.isCompleted);
 
   return (
     <div className="space-y-6">
@@ -60,9 +84,9 @@ export const GamificationDashboard = () => {
         <div className="flex items-center justify-between">
           <div>
             <div className="text-sm text-muted-foreground mb-1">Your Progress</div>
-            <div className="text-3xl font-bold mb-1">Level {gamification.level}</div>
+            <div className="text-3xl font-bold mb-1">Level {currentGamification.level}</div>
             <div className="text-sm text-muted-foreground">
-              {gamification.totalPoints} points earned
+              {currentGamification.totalPoints} points earned
             </div>
           </div>
           <div className="w-20 h-20 rounded-full bg-gradient-primary flex items-center justify-center">
@@ -72,10 +96,10 @@ export const GamificationDashboard = () => {
       </Card>
 
       {/* Streak Counter */}
-      {gamification.currentStreak > 0 && (
+      {currentGamification.currentStreak > 0 && (
         <StreakCounter
-          currentStreak={gamification.currentStreak}
-          longestStreak={gamification.longestStreak}
+          currentStreak={currentGamification.currentStreak}
+          longestStreak={currentGamification.longestStreak}
         />
       )}
 
@@ -88,7 +112,7 @@ export const GamificationDashboard = () => {
         </TabsList>
 
         <TabsContent value="missions" className="space-y-4 mt-4">
-          {missions.map((mission) => (
+          {currentMissions.map((mission) => (
             <MissionCard
               key={mission.key}
               name={mission.name}
@@ -100,25 +124,25 @@ export const GamificationDashboard = () => {
 
         <TabsContent value="progress" className="space-y-4 mt-4">
           <ProgressBar
-            current={gamification.segmentsExplored}
+            current={currentGamification.segmentsExplored}
             target={5}
             label="Segments Explored"
             icon={<Target className="w-4 h-4 text-primary" />}
           />
           <ProgressBar
-            current={gamification.segmentsCompared}
+            current={currentGamification.segmentsCompared}
             target={2}
             label="Segments Compared"
             icon={<TrendingUp className="w-4 h-4 text-primary" />}
           />
           <ProgressBar
-            current={gamification.visualizationsUsed}
+            current={currentGamification.visualizationsUsed}
             target={3}
             label="Visualizations Used"
             icon={<BarChart className="w-4 h-4 text-primary" />}
           />
           <ProgressBar
-            current={gamification.filtersApplied}
+            current={currentGamification.filtersApplied}
             target={1}
             label="Filters Applied"
             icon={<Filter className="w-4 h-4 text-primary" />}
