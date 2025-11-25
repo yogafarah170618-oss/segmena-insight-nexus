@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, Users, DollarSign, Calendar, ArrowLeft } from "lucide-react";
+import { TrendingUp, Users, DollarSign, Calendar, ArrowLeft, Trophy, Award, Medal, Star, Crown, Zap } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -255,6 +255,38 @@ const Segments = () => {
         </div>
       </div>
 
+      {/* Champions Gamification Section */}
+      {segmentName === 'Champions' && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card className="glass-card-strong p-6 relative overflow-hidden group hover:glow-effect transition-all duration-300">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-primary opacity-20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="relative">
+              <Trophy className="w-12 h-12 text-yellow-400 mb-3" />
+              <h3 className="text-xl font-bold mb-2">Top Tier Customers</h3>
+              <p className="text-sm text-muted-foreground">Elite pelanggan dengan performa terbaik</p>
+            </div>
+          </Card>
+          
+          <Card className="glass-card-strong p-6 relative overflow-hidden group hover:glow-effect transition-all duration-300">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-primary opacity-20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="relative">
+              <Crown className="w-12 h-12 text-amber-400 mb-3" />
+              <h3 className="text-xl font-bold mb-2">VIP Status</h3>
+              <p className="text-sm text-muted-foreground">Akses eksklusif dan rewards premium</p>
+            </div>
+          </Card>
+          
+          <Card className="glass-card-strong p-6 relative overflow-hidden group hover:glow-effect transition-all duration-300">
+            <div className="absolute -right-4 -top-4 w-24 h-24 bg-gradient-primary opacity-20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="relative">
+              <Zap className="w-12 h-12 text-blue-400 mb-3" />
+              <h3 className="text-xl font-bold mb-2">Power Users</h3>
+              <p className="text-sm text-muted-foreground">Transaksi tertinggi dengan loyalitas maksimal</p>
+            </div>
+          </Card>
+        </div>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
@@ -283,6 +315,9 @@ const Segments = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
+                  {segmentName === 'Champions' && (
+                    <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Rank</th>
+                  )}
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Customer ID</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Name</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Transactions</th>
@@ -290,47 +325,90 @@ const Segments = () => {
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Avg Spend</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Last Purchase</th>
                   <th className="text-left p-4 text-sm font-semibold text-muted-foreground">RFM Score</th>
+                  {segmentName === 'Champions' && (
+                    <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Achievement</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
-                {customers.map((customer, i) => (
-                  <tr
-                    key={i}
-                    className="border-b border-border hover:bg-primary/5 transition-colors"
-                  >
-                    <td className="p-4">
-                      <Badge variant="outline" className="font-mono">
-                        {customer.customer_id}
-                      </Badge>
-                    </td>
-                    <td className="p-4">
-                      {customer.customer_name ? (
-                        <span className="font-medium">{customer.customer_name}</span>
-                      ) : (
-                        <span className="text-muted-foreground italic">-</span>
+                {customers.map((customer, i) => {
+                  const getRankIcon = (index: number) => {
+                    if (index === 0) return <Trophy className="w-5 h-5 text-yellow-400" />;
+                    if (index === 1) return <Award className="w-5 h-5 text-gray-400" />;
+                    if (index === 2) return <Medal className="w-5 h-5 text-amber-600" />;
+                    return null;
+                  };
+
+                  const getAchievementBadge = (customer: SegmentCustomer) => {
+                    if (customer.total_spend > 2000000) {
+                      return { icon: Crown, text: "Big Spender", color: "text-yellow-400" };
+                    }
+                    if (customer.total_transactions > 40) {
+                      return { icon: Star, text: "Frequent Buyer", color: "text-blue-400" };
+                    }
+                    if (customer.recency_score === 5 && customer.frequency_score === 5 && customer.monetary_score === 5) {
+                      return { icon: Zap, text: "Perfect Score", color: "text-purple-400" };
+                    }
+                    return { icon: Trophy, text: "Champion", color: "text-amber-400" };
+                  };
+
+                  const achievement = segmentName === 'Champions' ? getAchievementBadge(customer) : null;
+
+                  return (
+                    <tr
+                      key={i}
+                      className="border-b border-border hover:bg-primary/5 transition-colors"
+                    >
+                      {segmentName === 'Champions' && (
+                        <td className="p-4">
+                          <div className="flex items-center gap-2">
+                            {getRankIcon(i)}
+                            <span className="font-bold text-lg">{i + 1}</span>
+                          </div>
+                        </td>
                       )}
-                    </td>
-                    <td className="p-4">{customer.total_transactions}</td>
-                    <td className="p-4 font-semibold text-secondary">{formatCurrency(customer.total_spend)}</td>
-                    <td className="p-4">{formatCurrency(customer.avg_spend)}</td>
-                    <td className="p-4 text-muted-foreground">
-                      {new Date(customer.last_transaction_date).toLocaleDateString('id-ID')}
-                    </td>
-                    <td className="p-4">
-                      <div className="flex gap-1">
-                        <Badge variant="secondary" className="text-xs">
-                          R:{customer.recency_score}
+                      <td className="p-4">
+                        <Badge variant="outline" className="font-mono">
+                          {customer.customer_id}
                         </Badge>
-                        <Badge variant="secondary" className="text-xs">
-                          F:{customer.frequency_score}
-                        </Badge>
-                        <Badge variant="secondary" className="text-xs">
-                          M:{customer.monetary_score}
-                        </Badge>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="p-4">
+                        {customer.customer_name ? (
+                          <span className="font-medium">{customer.customer_name}</span>
+                        ) : (
+                          <span className="text-muted-foreground italic">-</span>
+                        )}
+                      </td>
+                      <td className="p-4">{customer.total_transactions}</td>
+                      <td className="p-4 font-semibold text-secondary">{formatCurrency(customer.total_spend)}</td>
+                      <td className="p-4">{formatCurrency(customer.avg_spend)}</td>
+                      <td className="p-4 text-muted-foreground">
+                        {new Date(customer.last_transaction_date).toLocaleDateString('id-ID')}
+                      </td>
+                      <td className="p-4">
+                        <div className="flex gap-1">
+                          <Badge variant="secondary" className="text-xs">
+                            R:{customer.recency_score}
+                          </Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            F:{customer.frequency_score}
+                          </Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            M:{customer.monetary_score}
+                          </Badge>
+                        </div>
+                      </td>
+                      {segmentName === 'Champions' && achievement && (
+                        <td className="p-4">
+                          <Badge variant="outline" className="flex items-center gap-1 w-fit">
+                            <achievement.icon className={`w-3 h-3 ${achievement.color}`} />
+                            <span className="text-xs">{achievement.text}</span>
+                          </Badge>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
