@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Upload as UploadIcon, FileText, CheckCircle } from "lucide-react";
+import { Upload as UploadIcon, FileText, CheckCircle, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -95,13 +95,15 @@ const Upload = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center p-6 dotted-bg">
       <div className="max-w-4xl w-full space-y-8">
+        {/* Header */}
         <div className="text-center">
-          <h1 className="text-5xl font-bold mb-4">
-            <span className="gradient-text">Upload Your Data</span>
-          </h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="text-5xl md:text-6xl font-brutal mb-4">UPLOAD DATA</h1>
+          <div className="inline-block bg-secondary px-4 py-1 border-3 border-border shadow-brutal rotate-1">
+            <span className="font-mono text-secondary-foreground text-sm">CUSTOMER TRANSACTIONS</span>
+          </div>
+          <p className="font-mono text-muted-foreground mt-6 max-w-xl mx-auto">
             Upload transaksi pelanggan dalam format CSV untuk mendapatkan insight mendalam
           </p>
         </div>
@@ -111,16 +113,18 @@ const Upload = () => {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          className={`glass-card-strong rounded-3xl p-12 transition-all duration-300 ${
-            isDragging ? "glow-effect scale-105" : ""
+          className={`border-3 border-border bg-card shadow-brutal p-12 transition-all ${
+            isDragging ? "translate-x-[-4px] translate-y-[-4px] shadow-brutal-lg bg-secondary/10" : ""
           }`}
         >
           <div className="text-center">
             {!file ? (
               <>
-                <UploadIcon className="w-20 h-20 mx-auto mb-6 text-primary animate-pulse" />
-                <h3 className="text-2xl font-bold mb-4">Drop your CSV file here</h3>
-                <p className="text-muted-foreground mb-8">or click to browse</p>
+                <div className="w-24 h-24 border-3 border-border bg-foreground text-background flex items-center justify-center mx-auto mb-6">
+                  <UploadIcon className="w-12 h-12" />
+                </div>
+                <h3 className="text-2xl font-brutal mb-2">DROP YOUR CSV FILE HERE</h3>
+                <p className="font-mono text-muted-foreground mb-8">or click to browse</p>
                 <input
                   type="file"
                   accept=".csv"
@@ -129,30 +133,34 @@ const Upload = () => {
                   id="file-upload"
                 />
                 <label htmlFor="file-upload">
-                  <Button asChild className="bg-gradient-primary hover:opacity-90 glow-effect">
-                    <span>Browse Files</span>
+                  <Button asChild>
+                    <span>BROWSE FILES</span>
                   </Button>
                 </label>
               </>
             ) : (
               <div className="space-y-6">
-                <CheckCircle className="w-20 h-20 mx-auto text-secondary animate-scale-in" />
-                <div className="glass-card p-6 rounded-xl flex items-center justify-between">
+                <div className="w-24 h-24 border-3 border-border bg-secondary flex items-center justify-center mx-auto">
+                  <CheckCircle className="w-12 h-12 text-secondary-foreground" />
+                </div>
+                <div className="border-3 border-border p-4 flex items-center justify-between bg-card">
                   <div className="flex items-center gap-4">
-                    <FileText className="w-8 h-8 text-primary" />
+                    <div className="w-12 h-12 border-3 border-border flex items-center justify-center">
+                      <FileText className="w-6 h-6" />
+                    </div>
                     <div className="text-left">
-                      <div className="font-semibold">{file.name}</div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="font-brutal">{file.name}</div>
+                      <div className="text-sm font-mono text-muted-foreground">
                         {(file.size / 1024).toFixed(2)} KB
                       </div>
                     </div>
                   </div>
                   <Button
-                    variant="ghost"
+                    variant="outline"
+                    size="icon"
                     onClick={() => setFile(null)}
-                    className="hover:bg-destructive/10 hover:text-destructive"
                   >
-                    Remove
+                    <X className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
@@ -161,38 +169,42 @@ const Upload = () => {
         </div>
 
         {/* Format Info */}
-        <div className="glass-card p-8 rounded-2xl">
-          <h3 className="text-xl font-bold mb-4">Format Data yang Diperlukan</h3>
-          <div className="space-y-3 text-muted-foreground">
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-primary mt-2" />
+        <div className="border-3 border-border bg-card shadow-brutal p-8">
+          <h3 className="text-xl font-brutal mb-6 pb-4 border-b-3 border-border">FORMAT DATA YANG DIPERLUKAN</h3>
+          <div className="space-y-4 font-mono text-sm">
+            <div className="flex items-start gap-4">
+              <div className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs font-brutal flex-shrink-0">1</div>
               <div>
-                <strong className="text-foreground">customer_id:</strong> ID unik pelanggan <span className="text-red-500">(Wajib)</span>
+                <strong className="font-brutal">customer_id:</strong> ID unik pelanggan 
+                <span className="bg-accent text-accent-foreground px-2 py-0.5 ml-2 text-xs">WAJIB</span>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-primary mt-2" />
+            <div className="flex items-start gap-4">
+              <div className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs font-brutal flex-shrink-0">2</div>
               <div>
-                <strong className="text-foreground">transaction_date:</strong> Tanggal transaksi (YYYY-MM-DD) <span className="text-red-500">(Wajib)</span>
+                <strong className="font-brutal">transaction_date:</strong> Tanggal transaksi (YYYY-MM-DD) 
+                <span className="bg-accent text-accent-foreground px-2 py-0.5 ml-2 text-xs">WAJIB</span>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-primary mt-2" />
+            <div className="flex items-start gap-4">
+              <div className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs font-brutal flex-shrink-0">3</div>
               <div>
-                <strong className="text-foreground">transaction_amount:</strong> Nominal transaksi (angka) <span className="text-red-500">(Wajib)</span>
+                <strong className="font-brutal">transaction_amount:</strong> Nominal transaksi (angka) 
+                <span className="bg-accent text-accent-foreground px-2 py-0.5 ml-2 text-xs">WAJIB</span>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <div className="w-2 h-2 rounded-full bg-secondary mt-2" />
+            <div className="flex items-start gap-4">
+              <div className="w-6 h-6 bg-secondary text-secondary-foreground flex items-center justify-center text-xs font-brutal flex-shrink-0">4</div>
               <div>
-                <strong className="text-foreground">customer_name:</strong> Nama pelanggan <span className="text-muted-foreground">(Opsional)</span>
+                <strong className="font-brutal">customer_name:</strong> Nama pelanggan 
+                <span className="bg-muted px-2 py-0.5 ml-2 text-xs">OPSIONAL</span>
               </div>
             </div>
           </div>
           
-          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
-            <p className="text-sm font-semibold mb-2">Contoh format CSV:</p>
-            <code className="text-xs block whitespace-pre font-mono">
+          <div className="mt-6 p-4 border-3 border-border bg-muted">
+            <p className="text-sm font-brutal mb-3">CONTOH FORMAT CSV:</p>
+            <code className="text-xs block whitespace-pre font-mono leading-relaxed">
 customer_id,transaction_date,transaction_amount,customer_name{'\n'}
 CUST001,2024-01-15,500000,Ahmad Wijaya{'\n'}
 CUST002,2024-01-16,750000,{'\n'}
@@ -208,15 +220,15 @@ CUST003,2024-01-17,250000,Siti Nurhaliza
               size="lg"
               onClick={handleProcess}
               disabled={isProcessing}
-              className="bg-gradient-primary hover:opacity-90 glow-effect text-lg px-12 py-6"
+              className="text-lg px-12 py-6"
             >
               {isProcessing ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  Processing...
+                  <div className="w-5 h-5 border-3 border-current border-t-transparent rounded-full animate-spin mr-2" />
+                  PROCESSING...
                 </>
               ) : (
-                "Process Data"
+                "PROCESS DATA"
               )}
             </Button>
           </div>
