@@ -8,6 +8,7 @@ import { RevenueChart } from "@/components/charts/RevenueChart";
 import { SegmentPieChart } from "@/components/charts/SegmentPieChart";
 import { CustomerGrowthChart } from "@/components/charts/CustomerGrowthChart";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 interface SegmentData {
   segment_name: string;
@@ -42,14 +43,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     loadDashboardData();
-  }, [location.key]); // Reload when navigation happens
+  }, [location.key]);
 
   const loadDashboardData = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        // Show dummy data for preview
         setMetrics({
           totalCustomers: 1247,
           totalTransactions: 3842,
@@ -84,18 +84,17 @@ const Dashboard = () => {
         ]);
 
         setSegmentPieData([
-          { name: 'Champions', value: 187, color: 'hsl(142, 76%, 36%)' },
-          { name: 'Loyal Customers', value: 312, color: 'hsl(221, 83%, 53%)' },
-          { name: 'At Risk', value: 249, color: 'hsl(25, 95%, 53%)' },
-          { name: 'Recent Customers', value: 374, color: 'hsl(187, 85%, 43%)' },
-          { name: 'Lost', value: 125, color: 'hsl(0, 84%, 60%)' },
+          { name: 'Champions', value: 187, color: 'hsl(0, 0%, 0%)' },
+          { name: 'Loyal Customers', value: 312, color: 'hsl(45, 93%, 47%)' },
+          { name: 'At Risk', value: 249, color: 'hsl(354, 100%, 50%)' },
+          { name: 'Recent Customers', value: 374, color: 'hsl(0, 0%, 60%)' },
+          { name: 'Lost', value: 125, color: 'hsl(0, 0%, 80%)' },
         ]);
 
         setLoading(false);
         return;
       }
 
-      // Fetch transactions for metrics
       const { data: transactions, error: transError } = await supabase
         .from('transactions')
         .select('*')
@@ -103,7 +102,6 @@ const Dashboard = () => {
 
       if (transError) throw transError;
 
-      // Fetch segments
       const { data: segmentData, error: segError } = await supabase
         .from('customer_segments')
         .select('*')
@@ -116,7 +114,6 @@ const Dashboard = () => {
         return;
       }
 
-      // Calculate metrics
       const totalRevenue = transactions.reduce((sum, t) => sum + parseFloat(t.transaction_amount.toString()), 0);
       const uniqueCustomers = new Set(transactions.map(t => t.customer_id)).size;
       
@@ -127,7 +124,6 @@ const Dashboard = () => {
         totalRevenue: totalRevenue,
       });
 
-      // Group segments
       const segmentGroups = new Map<string, {
         count: number;
         totalSpend: number;
@@ -156,7 +152,6 @@ const Dashboard = () => {
 
       setSegments(segmentArray.sort((a, b) => b.total_revenue - a.total_revenue));
 
-      // Prepare chart data
       await prepareChartData(transactions, segmentData);
       
     } catch (error: any) {
@@ -167,7 +162,6 @@ const Dashboard = () => {
   };
 
   const prepareChartData = async (transactions: any[], segments: any[]) => {
-    // Revenue trend by month
     const monthlyData = new Map<string, { revenue: number; transactions: number }>();
     
     transactions.forEach(t => {
@@ -182,7 +176,7 @@ const Dashboard = () => {
 
     const revenueChartData = Array.from(monthlyData.entries())
       .sort((a, b) => a[0].localeCompare(b[0]))
-      .slice(-6) // Last 6 months
+      .slice(-6)
       .map(([date, data]) => ({
         date: new Date(date + '-01').toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }),
         revenue: data.revenue,
@@ -191,7 +185,6 @@ const Dashboard = () => {
 
     setRevenueData(revenueChartData);
 
-    // Customer growth by month
     const customersByMonth = new Map<string, Set<string>>();
     const sortedTransactions = [...transactions].sort((a, b) => 
       new Date(a.transaction_date).getTime() - new Date(b.transaction_date).getTime()
@@ -224,28 +217,27 @@ const Dashboard = () => {
 
     setCustomerGrowthData(growthChartData);
 
-    // Segment pie chart
     const segmentColors: Record<string, string> = {
-      'Champions': 'hsl(142, 76%, 36%)',
-      'Loyal Customers': 'hsl(221, 83%, 53%)',
-      'At Risk': 'hsl(25, 95%, 53%)',
-      'Lost': 'hsl(0, 84%, 60%)',
-      'Potential Loyalists': 'hsl(271, 91%, 65%)',
-      'Recent Customers': 'hsl(187, 85%, 43%)',
-      'Cant Lose Them': 'hsl(45, 93%, 47%)',
-      'Big Spenders': 'hsl(239, 84%, 67%)',
-      'Need Attention': 'hsl(215, 20%, 65%)',
+      'Champions': 'hsl(0, 0%, 0%)',
+      'Loyal Customers': 'hsl(45, 93%, 47%)',
+      'At Risk': 'hsl(354, 100%, 50%)',
+      'Lost': 'hsl(0, 0%, 60%)',
+      'Potential Loyalists': 'hsl(0, 0%, 40%)',
+      'Recent Customers': 'hsl(0, 0%, 80%)',
+      'Cant Lose Them': 'hsl(45, 93%, 60%)',
+      'Big Spenders': 'hsl(0, 0%, 20%)',
+      'Need Attention': 'hsl(0, 0%, 50%)',
     };
 
-    const segmentGroups = new Map<string, number>();
+    const segmentGroupsForPie = new Map<string, number>();
     segments?.forEach(seg => {
-      segmentGroups.set(seg.segment_name, (segmentGroups.get(seg.segment_name) || 0) + 1);
+      segmentGroupsForPie.set(seg.segment_name, (segmentGroupsForPie.get(seg.segment_name) || 0) + 1);
     });
 
-    const pieData = Array.from(segmentGroups.entries()).map(([name, count]) => ({
+    const pieData = Array.from(segmentGroupsForPie.entries()).map(([name, count]) => ({
       name,
       value: count,
-      color: segmentColors[name] || 'hsl(215, 20%, 65%)',
+      color: segmentColors[name] || 'hsl(0, 0%, 50%)',
     }));
 
     setSegmentPieData(pieData);
@@ -259,28 +251,26 @@ const Dashboard = () => {
     }).format(amount);
   };
 
-  const getSegmentColor = (segmentName: string) => {
-    const colors: Record<string, string> = {
-      'Champions': 'from-green-500 to-emerald-500',
-      'Loyal Customers': 'from-blue-500 to-cyan-500',
-      'At Risk': 'from-orange-500 to-amber-500',
-      'Lost': 'from-red-500 to-rose-500',
-      'Potential Loyalists': 'from-purple-500 to-pink-500',
-      'Recent Customers': 'from-teal-500 to-cyan-500',
-      'Cant Lose Them': 'from-yellow-500 to-orange-500',
-      'Big Spenders': 'from-indigo-500 to-purple-500',
-    };
-    return colors[segmentName] || 'from-gray-500 to-slate-500';
+  const getSegmentStyle = (segmentName: string, index: number) => {
+    const styles = [
+      'bg-foreground text-background',
+      'bg-secondary text-secondary-foreground',
+      'bg-accent text-accent-foreground',
+      'bg-card',
+    ];
+    return styles[index % styles.length];
   };
 
   if (loading) {
     return (
       <div className="min-h-screen p-8 space-y-8">
-        <Skeleton className="h-20 w-full" />
+        <div className="border-3 border-border p-4 bg-muted">
+          <Skeleton className="h-12 w-1/3 bg-border" />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Skeleton className="h-32" />
-          <Skeleton className="h-32" />
-          <Skeleton className="h-32" />
+          <Skeleton className="h-32 border-3 border-border" />
+          <Skeleton className="h-32 border-3 border-border" />
+          <Skeleton className="h-32 border-3 border-border" />
         </div>
       </div>
     );
@@ -288,90 +278,96 @@ const Dashboard = () => {
 
   if (metrics.totalCustomers === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-8">
-        <Card className="glass-card-strong p-12 text-center max-w-md">
-          <ShoppingCart className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-          <h2 className="text-2xl font-bold mb-2">Belum Ada Data</h2>
-          <p className="text-muted-foreground mb-6">
+      <div className="min-h-screen flex items-center justify-center p-8 dotted-bg">
+        <div className="border-3 border-border p-12 bg-card shadow-brutal-lg text-center max-w-md">
+          <div className="w-20 h-20 border-3 border-border bg-secondary flex items-center justify-center mx-auto mb-6">
+            <ShoppingCart className="w-10 h-10" />
+          </div>
+          <h2 className="text-3xl font-brutal mb-4">BELUM ADA DATA</h2>
+          <p className="font-mono text-muted-foreground mb-8">
             Upload file CSV transaksi pelanggan untuk mulai analisis
           </p>
-          <button
-            onClick={() => navigate("/upload")}
-            className="px-6 py-3 bg-gradient-primary rounded-lg font-semibold hover:opacity-90 transition-opacity"
-          >
-            Upload Data
-          </button>
-        </Card>
+          <Button onClick={() => navigate("/upload")} size="lg">
+            UPLOAD DATA
+          </Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-8 space-y-8">
-      <div>
-        <h1 className="text-5xl font-bold mb-2">
-          <span className="gradient-text">Analytics Dashboard</span>
+    <div className="min-h-screen p-4 sm:p-8 space-y-8">
+      {/* Header */}
+      <div className="border-3 border-border p-6 bg-foreground text-background shadow-brutal">
+        <h1 className="text-4xl sm:text-5xl font-brutal mb-2">
+          ANALYTICS DASHBOARD
         </h1>
-        <p className="text-xl text-muted-foreground">Real-time customer intelligence insights</p>
+        <p className="font-mono text-background/70">Real-time customer intelligence insights</p>
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {[
-          { icon: Users, label: "Total Customers", value: metrics.totalCustomers.toLocaleString() },
-          { icon: ShoppingCart, label: "Total Transactions", value: metrics.totalTransactions.toLocaleString() },
-          { icon: TrendingUp, label: "Avg. Spend", value: formatCurrency(metrics.avgSpend) },
+          { icon: Users, label: "TOTAL CUSTOMERS", value: metrics.totalCustomers.toLocaleString(), style: 'bg-card' },
+          { icon: ShoppingCart, label: "TOTAL TRANSACTIONS", value: metrics.totalTransactions.toLocaleString(), style: 'bg-secondary text-secondary-foreground' },
+          { icon: TrendingUp, label: "AVG. SPEND", value: formatCurrency(metrics.avgSpend), style: 'bg-card' },
         ].map((metric, i) => (
-          <Card key={i} className="glass-card-strong p-6 hover:glow-effect transition-all duration-300 floating">
+          <div 
+            key={i} 
+            className={`border-3 border-border p-6 shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all ${metric.style}`}
+          >
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-primary bg-opacity-20 flex items-center justify-center">
-                <metric.icon className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 border-3 border-current flex items-center justify-center">
+                <metric.icon className="w-6 h-6" />
               </div>
             </div>
-            <div className="text-3xl font-bold mb-1">{metric.value}</div>
-            <div className="text-sm text-muted-foreground">{metric.label}</div>
-          </Card>
+            <div className="text-3xl font-brutal mb-1">{metric.value}</div>
+            <div className="text-xs font-mono opacity-70">{metric.label}</div>
+          </div>
         ))}
       </div>
 
       {/* Segments Grid */}
       <div>
-        <h2 className="text-3xl font-bold mb-6">Customer Segments</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex items-center gap-4 mb-6">
+          <h2 className="text-3xl font-brutal">CUSTOMER SEGMENTS</h2>
+          <div className="flex-1 h-1 bg-border"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {segments.map((segment, i) => (
-            <Card
+            <div
               key={i}
-              className="glass-card-strong p-6 hover:glow-effect transition-all duration-300 cursor-pointer group"
+              className={`border-3 border-border p-6 shadow-brutal cursor-pointer hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-brutal-lg transition-all ${getSegmentStyle(segment.segment_name, i)}`}
               onClick={() => navigate(`/segments?segment=${segment.segment_name}`)}
             >
               <div className="flex items-center justify-between mb-4">
-                <Target className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
-                <div className="text-2xl font-bold">{segment.percentage.toFixed(0)}%</div>
+                <Target className="w-6 h-6" />
+                <div className="text-2xl font-brutal">{segment.percentage.toFixed(0)}%</div>
               </div>
-              <h3 className="text-xl font-bold mb-2">{segment.segment_name}</h3>
-              <div className="space-y-2 text-sm text-muted-foreground">
+              <h3 className="text-lg font-brutal mb-4">{segment.segment_name.toUpperCase()}</h3>
+              <div className="space-y-2 text-sm font-mono">
                 <div className="flex justify-between">
-                  <span>Customers:</span>
-                  <span className="text-foreground font-semibold">{segment.customer_count}</span>
+                  <span className="opacity-70">Customers:</span>
+                  <span className="font-bold">{segment.customer_count}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Avg Spend:</span>
-                  <span className="text-foreground font-semibold">{formatCurrency(segment.avg_spend)}</span>
+                  <span className="opacity-70">Avg Spend:</span>
+                  <span className="font-bold">{formatCurrency(segment.avg_spend)}</span>
                 </div>
               </div>
-              <div className={`h-2 rounded-full bg-gradient-to-r ${getSegmentColor(segment.segment_name)} mt-4`} />
-            </Card>
+              <div className="h-2 bg-current mt-4 opacity-30"></div>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Total Revenue Card */}
-      <Card className="glass-card-strong p-8">
-        <h2 className="text-2xl font-bold mb-4">Total Revenue</h2>
-        <div className="text-4xl font-bold gradient-text">
+      <div className="border-3 border-border p-8 bg-foreground text-background shadow-brutal-lg">
+        <h2 className="text-xl font-brutal mb-2">TOTAL REVENUE</h2>
+        <div className="text-4xl sm:text-5xl font-brutal">
           {formatCurrency(metrics.totalRevenue)}
         </div>
-      </Card>
+      </div>
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -13,12 +13,12 @@ export const CustomerGrowthChart = ({ data }: CustomerGrowthChartProps) => {
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="glass-card-strong p-4 border border-border rounded-lg">
-          <p className="text-sm font-semibold mb-2 text-foreground">{payload[0].payload.date}</p>
-          <p className="text-sm text-foreground font-medium">
+        <div className="border-3 border-border bg-card p-4 shadow-brutal font-mono">
+          <p className="font-brutal text-sm mb-2">{payload[0].payload.date}</p>
+          <p className="text-sm">
             Customer Baru: {payload[0].value}
           </p>
-          <p className="text-sm text-foreground font-medium">
+          <p className="text-sm">
             Total Customer: {payload[1].value}
           </p>
         </div>
@@ -28,37 +28,45 @@ export const CustomerGrowthChart = ({ data }: CustomerGrowthChartProps) => {
   };
 
   return (
-    <Card className="glass-card-strong">
+    <Card className="hover:translate-x-0 hover:translate-y-0 hover:shadow-brutal">
       <CardHeader>
-        <CardTitle>Customer Growth</CardTitle>
+        <CardTitle>CUSTOMER GROWTH</CardTitle>
         <CardDescription>Pertumbuhan customer per bulan</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <CartesianGrid strokeDasharray="0" stroke="hsl(var(--border))" strokeWidth={2} />
             <XAxis 
               dataKey="date" 
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
+              stroke="hsl(var(--foreground))"
+              fontSize={11}
+              fontFamily="Space Mono"
             />
             <YAxis 
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
+              stroke="hsl(var(--foreground))"
+              fontSize={11}
+              fontFamily="Space Mono"
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
+            <Legend 
+              wrapperStyle={{ fontFamily: 'Space Mono', fontSize: '12px' }}
+            />
             <Bar
               dataKey="newCustomers"
-              fill="hsl(var(--primary))"
+              fill="hsl(var(--foreground))"
               name="Customer Baru"
-              radius={[8, 8, 0, 0]}
+              radius={0}
+              stroke="hsl(var(--background))"
+              strokeWidth={2}
             />
             <Bar
               dataKey="totalCustomers"
               fill="hsl(var(--secondary))"
               name="Total Customer"
-              radius={[8, 8, 0, 0]}
+              radius={0}
+              stroke="hsl(var(--background))"
+              strokeWidth={2}
             />
           </BarChart>
         </ResponsiveContainer>

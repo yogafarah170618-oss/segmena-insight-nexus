@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Target, Zap, TrendingUp, BarChart3 } from "lucide-react";
+import { ArrowRight, Target, Zap, TrendingUp, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -16,10 +16,8 @@ const Landing = () => {
   useEffect(() => {
     checkAuthAndLoadData();
 
-    // Listen for auth changes (especially logout)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') {
-        // Reset to dummy data
         setIsLoggedIn(false);
         setStats({
           totalCustomers: "1,247",
@@ -45,7 +43,6 @@ const Landing = () => {
 
       setIsLoggedIn(true);
 
-      // Fetch real data
       const { data: transactions } = await supabase
         .from('transactions')
         .select('*')
@@ -79,57 +76,87 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen dotted-bg">
+      {/* Marquee Banner */}
+      <div className="bg-foreground text-background py-2 overflow-hidden border-b-3 border-border">
+        <div className="marquee whitespace-nowrap font-brutal text-sm tracking-wider">
+          ★ CUSTOMER INTELLIGENCE PLATFORM ★ SEGMENTASI OTOMATIS ★ INSIGHT SIAP PAKAI ★ MUDAH DIGUNAKAN ★ CUSTOMER INTELLIGENCE PLATFORM ★ SEGMENTASI OTOMATIS ★ INSIGHT SIAP PAKAI ★ MUDAH DIGUNAKAN ★
+        </div>
+      </div>
+
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center">
-          <h1 className="text-4xl sm:text-6xl md:text-8xl font-bold mb-4 sm:mb-6 animate-fade-in">
-            <span className="gradient-text">Segmena</span>
-          </h1>
-
-          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground mb-8 sm:mb-12 max-w-2xl mx-auto animate-fade-in px-4" style={{ animationDelay: "0.2s" }}>
-            Platform Customer Intelligence untuk UMKM. Segmentasi otomatis, insight siap pakai, mudah digunakan.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-12 sm:mb-16 animate-fade-in px-4" style={{ animationDelay: "0.3s" }}>
-            <Button
-              size="lg"
-              onClick={() => navigate("/upload")}
-              className="bg-gradient-primary hover:opacity-90 glow-effect text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 group"
-            >
-              Upload Data
-              <ArrowRight className="ml-2 w-4 sm:w-5 h-4 sm:h-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => navigate("/dashboard")}
-              className="glass-card text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 hover:bg-primary/10"
-            >
-              Try Demo
-            </Button>
-          </div>
-
-          {/* Dashboard Mockup */}
-          <div className="relative max-w-5xl mx-auto animate-fade-in px-4" style={{ animationDelay: "0.4s" }}>
-            <div className="glass-card-strong rounded-2xl sm:rounded-3xl p-4 sm:p-8 glow-effect">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
-                {[
-                  { label: "Total Customers", value: stats.totalCustomers },
-                  { label: "Active Segments", value: stats.activeSegments },
-                  { label: "Avg. Transaction", value: stats.avgTransaction },
-                ].map((stat, i) => (
-                  <div key={i} className="glass-card p-3 sm:p-4 rounded-xl">
-                    <div className="text-xs sm:text-sm text-muted-foreground mb-1">{stat.label}</div>
-                    <div className="text-xl sm:text-2xl font-bold gradient-text">{stat.value}</div>
-                  </div>
-                ))}
+      <section className="min-h-[90vh] flex items-center justify-center py-20">
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="max-w-5xl mx-auto">
+            {/* Main Title */}
+            <div className="mb-12 text-center">
+              <h1 className="text-6xl sm:text-8xl md:text-[10rem] font-brutal leading-none tracking-tight mb-6">
+                SEGMENA
+              </h1>
+              <div className="inline-block bg-secondary px-6 py-2 border-3 border-border shadow-brutal -rotate-2 mb-8">
+                <span className="font-brutal text-secondary-foreground text-lg sm:text-xl">
+                  CUSTOMER INTELLIGENCE
+                </span>
               </div>
-              <div className="h-48 sm:h-64 glass-card rounded-xl flex items-center justify-center">
+              <p className="text-lg sm:text-xl font-mono max-w-2xl mx-auto mb-12">
+                Platform Customer Intelligence untuk UMKM. Segmentasi otomatis, insight siap pakai, mudah digunakan.
+              </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+              <Button
+                size="lg"
+                onClick={() => navigate("/upload")}
+                className="text-lg px-10 py-6"
+              >
+                Upload Data
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate("/dashboard")}
+                className="text-lg px-10 py-6"
+              >
+                Try Demo
+              </Button>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+              {[
+                { label: "TOTAL CUSTOMERS", value: stats.totalCustomers },
+                { label: "ACTIVE SEGMENTS", value: stats.activeSegments },
+                { label: "AVG. TRANSACTION", value: stats.avgTransaction },
+              ].map((stat, i) => (
+                <div 
+                  key={i} 
+                  className={`border-3 border-border p-6 bg-card shadow-brutal ${
+                    i === 1 ? 'bg-secondary text-secondary-foreground' : ''
+                  }`}
+                >
+                  <div className="text-xs font-mono mb-2 opacity-70">{stat.label}</div>
+                  <div className="text-3xl sm:text-4xl font-brutal">{stat.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Dashboard Preview */}
+            <div className="mt-16 border-3 border-border p-6 bg-card shadow-brutal-lg">
+              <div className="flex items-center justify-between border-b-3 border-border pb-4 mb-6">
+                <div className="flex gap-2">
+                  <div className="w-4 h-4 bg-accent border-2 border-border"></div>
+                  <div className="w-4 h-4 bg-secondary border-2 border-border"></div>
+                  <div className="w-4 h-4 bg-foreground border-2 border-border"></div>
+                </div>
+                <span className="font-mono text-sm">DASHBOARD.EXE</span>
+              </div>
+              <div className="h-48 sm:h-64 flex items-center justify-center striped-bg border-3 border-border">
                 <div className="text-center">
-                  <BarChart3 className="w-12 sm:w-16 h-12 sm:h-16 mx-auto mb-3 sm:mb-4 text-primary animate-pulse" />
-                  <p className="text-sm sm:text-base text-muted-foreground">
-                    {isLoggedIn ? "Your Analytics Dashboard" : "Beautiful Analytics Dashboard"}
+                  <BarChart3 className="w-16 h-16 mx-auto mb-4" />
+                  <p className="font-brutal text-lg">
+                    {isLoggedIn ? "YOUR ANALYTICS" : "ANALYTICS DASHBOARD"}
                   </p>
                 </div>
               </div>
@@ -139,47 +166,69 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 sm:py-32 relative">
+      <section className="py-20 border-t-3 border-border">
         <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12 sm:mb-20">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-3 sm:mb-4">
-              <span className="gradient-text">Keunggulan Platform</span>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-6xl font-brutal mb-4">
+              KEUNGGULAN
             </h2>
-            <p className="text-base sm:text-xl text-muted-foreground px-4">
-              Insight pelanggan yang powerful, tanpa kompleksitas
-            </p>
+            <div className="inline-block bg-accent text-accent-foreground px-4 py-1 rotate-1 border-3 border-border shadow-brutal">
+              <span className="font-mono">PLATFORM KAMI</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {[
               {
                 icon: Target,
-                title: "Segmentasi Otomatis",
+                title: "SEGMENTASI OTOMATIS",
                 description: "Algoritma canggih mengelompokkan pelanggan berdasarkan perilaku transaksi mereka secara otomatis.",
+                highlight: "bg-secondary",
               },
               {
                 icon: Zap,
-                title: "Insight Siap Pakai",
+                title: "INSIGHT SIAP PAKAI",
                 description: "Dapatkan rekomendasi strategi marketing langsung dari data Anda tanpa perlu analisis manual.",
+                highlight: "bg-accent text-accent-foreground",
               },
               {
                 icon: TrendingUp,
-                title: "Mudah Digunakan",
+                title: "MUDAH DIGUNAKAN",
                 description: "Upload CSV, lihat hasil. Sesederhana itu. Tidak perlu keahlian data science.",
+                highlight: "bg-foreground text-background",
               },
             ].map((feature, i) => (
               <div
                 key={i}
-                className="glass-card-strong p-6 sm:p-8 rounded-2xl hover:glow-effect transition-all duration-300 group"
+                className="border-3 border-border p-8 bg-card shadow-brutal hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-brutal-lg transition-all group"
               >
-                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-gradient-primary flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform">
-                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+                <div className={`w-16 h-16 ${feature.highlight} border-3 border-border flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform`}>
+                  <feature.icon className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{feature.title}</h3>
-                <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{feature.description}</p>
+                <h3 className="text-xl font-brutal mb-4">{feature.title}</h3>
+                <p className="font-mono text-sm text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="py-20 border-t-3 border-border bg-foreground text-background">
+        <div className="container mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-4xl sm:text-6xl font-brutal mb-8">
+            MULAI SEKARANG
+          </h2>
+          <Button
+            size="lg"
+            onClick={() => navigate("/auth")}
+            className="bg-secondary text-secondary-foreground text-lg px-12 py-6 hover:bg-secondary/90"
+          >
+            DAFTAR GRATIS
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
         </div>
       </section>
     </div>
