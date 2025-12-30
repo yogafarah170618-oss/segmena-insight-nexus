@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, Users, DollarSign, Calendar, ArrowLeft, ChevronRight } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -57,7 +56,6 @@ const Segments = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        // Show dummy data for preview
         const dummyData: Record<string, SegmentCustomer[]> = {
           'Champions': [
             { customer_id: 'CUST-001', customer_name: 'Budi Santoso', total_transactions: 45, total_spend: 2250000, avg_spend: 50000, last_transaction_date: '2024-11-15', recency_score: 5, frequency_score: 5, monetary_score: 5 },
@@ -99,7 +97,6 @@ const Segments = () => {
         return;
       }
 
-      // Fetch segments
       const { data, error } = await supabase
         .from('customer_segments')
         .select('*')
@@ -114,7 +111,6 @@ const Segments = () => {
         return;
       }
 
-      // Fetch customer names from transactions
       const customerIds = data.map(c => c.customer_id);
       const { data: transData } = await supabase
         .from('transactions')
@@ -124,7 +120,6 @@ const Segments = () => {
         .not('customer_name', 'is', null)
         .order('created_at', { ascending: false });
 
-      // Create a map of customer_id to name (take most recent name if multiple)
       const nameMap = new Map<string, string>();
       transData?.forEach(t => {
         if (t.customer_name && !nameMap.has(t.customer_id)) {
@@ -173,7 +168,7 @@ const Segments = () => {
 
   const getSegmentDescription = (name: string) => {
     const descriptions: Record<string, string> = {
-      'Champions': 'Pelanggan terbaik Anda dengan frekuensi dan nilai transaksi tertinggi',
+      'Champions': 'Pelanggan terbaik dengan frekuensi dan nilai transaksi tertinggi',
       'Loyal Customers': 'Pelanggan setia dengan transaksi reguler dan konsisten',
       'At Risk': 'Pelanggan yang sebelumnya aktif tapi mulai menjauh',
       'Lost': 'Pelanggan yang sudah lama tidak bertransaksi',
@@ -221,95 +216,95 @@ const Segments = () => {
       'Champions': [
         {
           title: 'Exclusive Benefits & Early Access',
-          description: 'Champions adalah pelanggan terbaik Anda. Berikan mereka akses istimewa ke produk baru, event khusus, atau promo eksklusif sebelum pelanggan lain. Ini membuat mereka merasa dihargai dan memperkuat loyalitas.',
+          description: 'Champions adalah pelanggan terbaik Anda. Berikan mereka akses istimewa ke produk baru, event khusus, atau promo eksklusif sebelum pelanggan lain.',
           examples: [
             'Pre-launch access ke produk atau koleksi baru',
             'Undangan ke event VIP atau private sale',
             'Free shipping atau priority delivery',
-            'Akses ke customer service khusus dengan response time lebih cepat',
+            'Akses ke customer service khusus',
           ]
         },
         {
           title: 'Program VIP dengan Rewards Khusus',
-          description: 'Ciptakan tier VIP khusus untuk Champions dengan benefit yang tidak tersedia untuk pelanggan lain. Program ini harus memberikan nilai nyata dan membuat mereka tetap engaged.',
+          description: 'Ciptakan tier VIP khusus untuk Champions dengan benefit yang tidak tersedia untuk pelanggan lain.',
           examples: [
             'Poin reward dengan multiplier lebih tinggi',
             'Birthday gifts atau anniversary rewards',
-            'Complimentary gift wrapping atau personalization',
+            'Complimentary gift wrapping',
             'Akses ke limited edition products',
           ]
         },
         {
           title: 'Brand Ambassador & Referral Program',
-          description: 'Champions yang puas adalah promoter terbaik. Manfaatkan word-of-mouth mereka dengan program referral yang menguntungkan kedua belah pihak.',
+          description: 'Champions yang puas adalah promoter terbaik. Manfaatkan word-of-mouth mereka dengan program referral.',
           examples: [
-            'Referral rewards untuk mereka dan teman yang direferensikan',
-            'User-generated content campaign dengan incentive',
+            'Referral rewards untuk mereka dan teman',
+            'User-generated content campaign',
             'Testimony atau review rewards program',
-            'Community building melalui exclusive group atau forum',
+            'Community building melalui exclusive group',
           ]
         },
       ],
       'Loyal Customers': [
         {
           title: 'Loyalty Program yang Menarik',
-          description: 'Loyal Customers konsisten tapi belum di level Champions. Pertahankan mereka dengan program loyalitas yang memberikan reward atas konsistensi mereka.',
+          description: 'Loyal Customers konsisten tapi belum di level Champions. Pertahankan mereka dengan program loyalitas.',
           examples: [
-            'Tiered loyalty program dengan clear benefits di setiap level',
-            'Milestone rewards untuk transaksi ke-10, ke-20, dst',
+            'Tiered loyalty program dengan clear benefits',
+            'Milestone rewards untuk transaksi ke-10, ke-20',
             'Seasonal bonus points atau cashback',
             'Member exclusive discounts',
           ]
         },
         {
           title: 'Personalized Recommendations',
-          description: 'Gunakan data pembelian mereka untuk memberikan rekomendasi produk yang relevan. Personalisasi membuat mereka merasa diperhatikan.',
+          description: 'Gunakan data pembelian mereka untuk memberikan rekomendasi produk yang relevan.',
           examples: [
-            'Email marketing dengan product recommendations based on purchase history',
-            'Replenishment reminders untuk consumable products',
+            'Email marketing dengan product recommendations',
+            'Replenishment reminders',
             'Bundle suggestions yang complement past purchases',
             'Personalized content berdasarkan preferences',
           ]
         },
         {
           title: 'Upgrade Program ke Champions',
-          description: 'Berikan insentif dan path yang jelas untuk naik ke tier Champions. Buat mereka termotivasi untuk meningkatkan engagement.',
+          description: 'Berikan insentif dan path yang jelas untuk naik ke tier Champions.',
           examples: [
-            'Clear communication tentang benefit Champions tier',
+            'Clear communication tentang benefit Champions',
             'Limited time promotion untuk upgrade',
             'Gamification dengan progress tracker',
-            'Exclusive challenges atau missions untuk unlock Champions status',
+            'Exclusive challenges untuk unlock Champions status',
           ]
         },
       ],
       'At Risk': [
         {
           title: 'Win-back Campaign dengan Special Offers',
-          description: 'At Risk customers mulai menjauh. Butuh immediate action untuk menarik mereka kembali dengan insentif yang compelling.',
+          description: 'At Risk customers mulai menjauh. Butuh immediate action untuk menarik mereka kembali.',
           examples: [
-            'Personalized discount code dengan urgency (limited time)',
+            'Personalized discount code dengan urgency',
             '"We miss you" email dengan special offer',
             'Free gift with next purchase',
-            'Reactivation bonus points atau cashback',
+            'Reactivation bonus points',
           ]
         },
         {
           title: 'Survey & Understanding Pain Points',
-          description: 'Pahami mengapa mereka mulai menjauh. Feedback langsung dari mereka adalah insight berharga untuk improvement.',
+          description: 'Pahami mengapa mereka mulai menjauh. Feedback langsung adalah insight berharga.',
           examples: [
-            'Short survey dengan incentive untuk completion',
+            'Short survey dengan incentive',
             'Personal outreach via email atau phone',
-            'Focus group invitation dengan compensation',
-            'Review request dengan follow-up untuk negative feedback',
+            'Focus group invitation',
+            'Review request dengan follow-up',
           ]
         },
         {
           title: 'Re-engagement Email Series',
-          description: 'Automated campaign yang strategis untuk gradually rebuild relationship tanpa terlihat desperate.',
+          description: 'Automated campaign yang strategis untuk gradually rebuild relationship.',
           examples: [
-            'Series email yang progressively increase offer value',
-            'Educational content tentang new features atau products',
-            'Social proof email dengan testimonials atau reviews',
+            'Series email dengan progressively increase offer',
+            'Educational content tentang new features',
+            'Social proof email dengan testimonials',
             'Last chance email sebelum list removal',
           ]
         },
@@ -317,32 +312,32 @@ const Segments = () => {
       'Lost': [
         {
           title: 'Aggressive Win-back Offers',
-          description: 'Lost customers sudah lama tidak bertransaksi. Butuh approach yang lebih agresif untuk menarik perhatian mereka kembali.',
+          description: 'Lost customers sudah lama tidak bertransaksi. Butuh approach yang lebih agresif.',
           examples: [
-            'High-value discount atau buy-one-get-one offers',
+            'High-value discount atau BOGO offers',
             'Free product atau gift dengan minimal purchase',
-            'Store credit atau voucher dengan no strings attached',
-            'Clearance sale access dengan deep discounts',
+            'Store credit atau voucher',
+            'Clearance sale access',
           ]
         },
         {
           title: 'Investigate Churn Reasons',
-          description: 'Analisis mendalam mengapa mereka berhenti. Data ini crucial untuk prevent future churn dan improve business.',
+          description: 'Analisis mendalam mengapa mereka berhenti. Data ini crucial untuk prevent future churn.',
           examples: [
             'Exit survey dengan attractive incentive',
-            'Data analysis untuk identify common patterns',
-            'Competitor analysis untuk understand market shift',
-            'Product atau service audit based on feedback',
+            'Data analysis untuk identify patterns',
+            'Competitor analysis',
+            'Product audit based on feedback',
           ]
         },
         {
           title: 'Evaluate Re-engagement Worth',
-          description: 'Tidak semua lost customers worth effort untuk win back. Fokuskan resource ke high-value customers.',
+          description: 'Tidak semua lost customers worth effort untuk win back. Fokuskan resource ke high-value.',
           examples: [
-            'Calculate customer lifetime value untuk prioritize',
-            'Segment lost customers by past purchase value',
-            'Cost-benefit analysis untuk win-back campaigns',
-            'Archive truly inactive customers untuk list hygiene',
+            'Calculate customer lifetime value',
+            'Segment by past purchase value',
+            'Cost-benefit analysis untuk campaigns',
+            'Archive inactive customers untuk list hygiene',
           ]
         },
       ],
@@ -351,31 +346,31 @@ const Segments = () => {
     const defaultDetails = [
       {
         title: 'Analisis Behavior Patterns',
-        description: 'Pelajari pola perilaku pelanggan di segment ini untuk memahami kebutuhan dan preferensi mereka.',
+        description: 'Pelajari pola perilaku pelanggan di segment ini.',
         examples: [
           'Track purchase frequency dan seasonality',
-          'Analyze product preferences dan categories',
+          'Analyze product preferences',
           'Monitor engagement dengan marketing channels',
           'Identify triggers untuk purchase decisions',
         ]
       },
       {
         title: 'Targeted Engagement Campaigns',
-        description: 'Buat campaign yang spesifik untuk segment ini berdasarkan karakteristik unik mereka.',
+        description: 'Buat campaign yang spesifik untuk segment ini.',
         examples: [
-          'Segmented email campaigns dengan relevant content',
-          'Personalized offers based on segment behavior',
-          'Channel-specific campaigns (social, email, SMS)',
+          'Segmented email campaigns',
+          'Personalized offers based on behavior',
+          'Channel-specific campaigns',
           'A/B testing untuk optimize messaging',
         ]
       },
       {
         title: 'Regular Progress Monitoring',
-        description: 'Monitor pergerakan customers antar segments dan adjust strategy sesuai kebutuhan.',
+        description: 'Monitor pergerakan customers antar segments.',
         examples: [
           'Monthly segment health check',
-          'Track customers yang upgrade atau downgrade segments',
-          'Measure campaign effectiveness per segment',
+          'Track segment movement',
+          'Measure campaign effectiveness',
           'Adjust strategy based on results',
         ]
       },
@@ -387,9 +382,11 @@ const Segments = () => {
   if (loading) {
     return (
       <div className="min-h-screen p-8 space-y-8">
-        <Skeleton className="h-20 w-full" />
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32" />)}
+        <div className="border-3 border-border p-4 bg-muted">
+          <Skeleton className="h-12 w-1/3 bg-border" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 border-3 border-border" />)}
         </div>
       </div>
     );
@@ -397,167 +394,172 @@ const Segments = () => {
 
   if (customers.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-8">
-        <Card className="glass-card-strong p-12 text-center max-w-md">
-          <Users className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-          <h2 className="text-2xl font-bold mb-2">Tidak Ada Data</h2>
-          <p className="text-muted-foreground mb-6">
+      <div className="min-h-screen flex items-center justify-center p-8 dotted-bg">
+        <div className="border-3 border-border p-12 bg-card shadow-brutal-lg text-center max-w-md">
+          <div className="w-20 h-20 border-3 border-border bg-muted flex items-center justify-center mx-auto mb-6">
+            <Users className="w-10 h-10" />
+          </div>
+          <h2 className="text-3xl font-brutal mb-4">TIDAK ADA DATA</h2>
+          <p className="font-mono text-muted-foreground mb-8">
             Belum ada customer di segmen {segmentName}
           </p>
           <Button onClick={() => navigate("/dashboard")}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Kembali ke Dashboard
+            KEMBALI
           </Button>
-        </Card>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-8 space-y-8">
-      <div className="flex items-center gap-4 mb-4">
+    <div className="min-h-screen p-4 sm:p-8 space-y-8">
+      {/* Header */}
+      <div className="flex items-start gap-4">
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           onClick={() => navigate("/dashboard")}
+          className="flex-shrink-0"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <div>
-          <h1 className="text-5xl font-bold mb-2">
-            <span className="gradient-text">{segmentName}</span>
-          </h1>
-          <p className="text-xl text-muted-foreground">{getSegmentDescription(segmentName)}</p>
+          <h1 className="text-4xl sm:text-5xl font-brutal mb-2">{segmentName.toUpperCase()}</h1>
+          <p className="font-mono text-muted-foreground">{getSegmentDescription(segmentName)}</p>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { icon: Users, label: "Total Customers", value: stats.totalCustomers },
-          { icon: DollarSign, label: "Avg. Spend", value: formatCurrency(stats.avgSpend) },
-          { icon: TrendingUp, label: "Avg. Frequency", value: `${stats.avgFrequency.toFixed(1)}x` },
-          { icon: Calendar, label: "Total Revenue", value: formatCurrency(stats.totalRevenue) },
+          { icon: Users, label: "TOTAL CUSTOMERS", value: stats.totalCustomers, style: 'bg-card' },
+          { icon: DollarSign, label: "AVG. SPEND", value: formatCurrency(stats.avgSpend), style: 'bg-secondary text-secondary-foreground' },
+          { icon: TrendingUp, label: "AVG. FREQUENCY", value: `${stats.avgFrequency.toFixed(1)}x`, style: 'bg-card' },
+          { icon: Calendar, label: "TOTAL REVENUE", value: formatCurrency(stats.totalRevenue), style: 'bg-foreground text-background' },
         ].map((stat, i) => (
-          <Card key={i} className="glass-card-strong p-6 floating" style={{ animationDelay: `${i * 0.1}s` }}>
+          <div 
+            key={i} 
+            className={`border-3 border-border p-6 shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all ${stat.style}`}
+          >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <div className="w-10 h-10 border-3 border-current flex items-center justify-center">
                 <stat.icon className="w-5 h-5" />
               </div>
             </div>
-            <div className="text-2xl font-bold mb-1">{stat.value}</div>
-            <div className="text-sm text-muted-foreground">{stat.label}</div>
-          </Card>
+            <div className="text-2xl font-brutal mb-1">{stat.value}</div>
+            <div className="text-xs font-mono opacity-70">{stat.label}</div>
+          </div>
         ))}
       </div>
 
       {/* Customers Table */}
       <div>
-        <h2 className="text-3xl font-bold mb-6">Customers in this Segment</h2>
-        <Card className="glass-card-strong overflow-hidden">
+        <div className="flex items-center gap-4 mb-6">
+          <h2 className="text-2xl font-brutal">CUSTOMERS IN SEGMENT</h2>
+          <div className="flex-1 h-1 bg-border"></div>
+        </div>
+        <div className="border-3 border-border bg-card shadow-brutal overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Customer ID</th>
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Name</th>
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Transactions</th>
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Total Spend</th>
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Avg Spend</th>
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">Last Purchase</th>
-                  <th className="text-left p-4 text-sm font-semibold text-muted-foreground">RFM Score</th>
+                <tr className="border-b-3 border-border bg-muted">
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">CUSTOMER ID</th>
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">NAME</th>
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">TRANSACTIONS</th>
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">TOTAL SPEND</th>
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">AVG SPEND</th>
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">LAST PURCHASE</th>
+                  <th className="text-left p-4 text-xs font-brutal tracking-wider">RFM SCORE</th>
                 </tr>
               </thead>
               <tbody>
-                {customers.map((customer, i) => {
-                  return (
-                    <tr
-                      key={i}
-                      className="border-b border-border hover:bg-primary/5 transition-colors"
-                    >
-                      <td className="p-4">
-                        <Badge variant="outline" className="font-mono">
-                          {customer.customer_id}
-                        </Badge>
-                      </td>
-                      <td className="p-4">
-                        {customer.customer_name ? (
-                          <span className="font-medium">{customer.customer_name}</span>
-                        ) : (
-                          <span className="text-muted-foreground italic">-</span>
-                        )}
-                      </td>
-                      <td className="p-4">{customer.total_transactions}</td>
-                      <td className="p-4 font-semibold text-secondary">{formatCurrency(customer.total_spend)}</td>
-                      <td className="p-4">{formatCurrency(customer.avg_spend)}</td>
-                      <td className="p-4 text-muted-foreground">
-                        {new Date(customer.last_transaction_date).toLocaleDateString('id-ID')}
-                      </td>
-                      <td className="p-4">
-                        <div className="flex gap-1">
-                          <Badge variant="secondary" className="text-xs">
-                            R:{customer.recency_score}
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            F:{customer.frequency_score}
-                          </Badge>
-                          <Badge variant="secondary" className="text-xs">
-                            M:{customer.monetary_score}
-                          </Badge>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {customers.map((customer, i) => (
+                  <tr
+                    key={i}
+                    className="border-b-3 border-border hover:bg-muted/50 transition-colors"
+                  >
+                    <td className="p-4">
+                      <span className="font-mono text-sm bg-muted px-2 py-1 border border-border">
+                        {customer.customer_id}
+                      </span>
+                    </td>
+                    <td className="p-4 font-mono">
+                      {customer.customer_name || <span className="text-muted-foreground">-</span>}
+                    </td>
+                    <td className="p-4 font-mono">{customer.total_transactions}</td>
+                    <td className="p-4 font-mono font-bold">{formatCurrency(customer.total_spend)}</td>
+                    <td className="p-4 font-mono">{formatCurrency(customer.avg_spend)}</td>
+                    <td className="p-4 font-mono text-muted-foreground">
+                      {new Date(customer.last_transaction_date).toLocaleDateString('id-ID')}
+                    </td>
+                    <td className="p-4">
+                      <div className="flex gap-1">
+                        <span className="text-xs font-mono bg-foreground text-background px-2 py-0.5">
+                          R:{customer.recency_score}
+                        </span>
+                        <span className="text-xs font-mono bg-secondary text-secondary-foreground px-2 py-0.5">
+                          F:{customer.frequency_score}
+                        </span>
+                        <span className="text-xs font-mono bg-muted px-2 py-0.5">
+                          M:{customer.monetary_score}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-        </Card>
+        </div>
       </div>
 
       {/* Strategies */}
       <div>
-        <h2 className="text-3xl font-bold mb-6">Recommended Strategies</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="flex items-center gap-4 mb-6">
+          <h2 className="text-2xl font-brutal">RECOMMENDED STRATEGIES</h2>
+          <div className="flex-1 h-1 bg-border"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {getStrategies(segmentName).map((strategy, i) => (
-            <Card 
+            <div 
               key={i} 
-              className="glass-card-strong p-6 hover:glow-effect transition-all duration-300 cursor-pointer group"
+              className="border-3 border-border p-6 bg-card shadow-brutal hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-brutal-lg transition-all cursor-pointer group"
               onClick={() => setSelectedStrategy(getStrategyDetails(segmentName, i))}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center mb-4 text-xl font-bold">
+                  <div className="w-12 h-12 border-3 border-border bg-foreground text-background flex items-center justify-center mb-4 font-brutal text-xl">
                     {i + 1}
                   </div>
-                  <p className="text-muted-foreground leading-relaxed">{strategy}</p>
+                  <p className="font-mono text-sm text-muted-foreground leading-relaxed">{strategy}</p>
                 </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
               </div>
-            </Card>
+            </div>
           ))}
         </div>
       </div>
 
       {/* Strategy Detail Modal */}
       <Dialog open={!!selectedStrategy} onOpenChange={() => setSelectedStrategy(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto border-3 border-border shadow-brutal-lg">
           <DialogHeader>
-            <DialogTitle className="text-2xl gradient-text">{selectedStrategy?.title}</DialogTitle>
-            <DialogDescription className="text-base text-foreground/80 mt-2">
+            <DialogTitle className="text-2xl font-brutal">{selectedStrategy?.title.toUpperCase()}</DialogTitle>
+            <DialogDescription className="text-base font-mono mt-2">
               {selectedStrategy?.description}
             </DialogDescription>
           </DialogHeader>
           
           <div className="mt-6">
-            <h4 className="text-lg font-semibold mb-4">Contoh Implementasi:</h4>
+            <h4 className="font-brutal text-sm tracking-wider mb-4">CONTOH IMPLEMENTASI:</h4>
             <ul className="space-y-3">
               {selectedStrategy?.examples.map((example, i) => (
                 <li key={i} className="flex gap-3">
-                  <Badge variant="secondary" className="h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs font-brutal flex-shrink-0">
                     {i + 1}
-                  </Badge>
-                  <span className="text-muted-foreground">{example}</span>
+                  </span>
+                  <span className="font-mono text-sm text-muted-foreground">{example}</span>
                 </li>
               ))}
             </ul>
