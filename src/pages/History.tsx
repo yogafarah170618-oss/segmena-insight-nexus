@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, Calendar, FileText, Loader2 } from "lucide-react";
+import { Trash2, Calendar, FileText, Loader2, Users, ShoppingCart } from "lucide-react";
 import { format } from "date-fns";
 import { id as idLocale } from "date-fns/locale";
 import {
@@ -202,140 +201,155 @@ const History = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="min-h-screen flex items-center justify-center dotted-bg">
+        <div className="w-12 h-12 border-3 border-border bg-card flex items-center justify-center shadow-brutal">
+          <Loader2 className="h-6 w-6 animate-spin" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container max-w-6xl mx-auto p-6 space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold mb-2">Riwayat Upload</h1>
-        <p className="text-muted-foreground">
-          Kelola riwayat upload data Anda
-        </p>
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 space-y-6">
+      {/* Header */}
+      <div className="border-3 border-border p-4 sm:p-6 bg-foreground text-background shadow-brutal">
+        <h1 className="text-2xl sm:text-4xl font-brutal mb-2">RIWAYAT UPLOAD</h1>
+        <p className="font-mono text-sm text-background/70">Kelola riwayat upload data Anda</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Riwayat Upload Data</CardTitle>
-              <CardDescription>
-                Daftar file yang pernah Anda upload
-              </CardDescription>
-            </div>
-            {(uploadHistory.length > 0 || hasOrphanedData) && (
-              <Button
-                variant="destructive"
-                onClick={() => setDeleteAllDialogOpen(true)}
-                disabled={deleting}
-              >
-                {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Hapus Semua Data
-              </Button>
-            )}
+      {/* Main Card */}
+      <div className="border-3 border-border bg-card shadow-brutal">
+        {/* Card Header */}
+        <div className="p-4 sm:p-6 border-b-3 border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-brutal">RIWAYAT UPLOAD DATA</h2>
+            <p className="font-mono text-sm text-muted-foreground">Daftar file yang pernah Anda upload</p>
           </div>
-        </CardHeader>
-        <CardContent>
+          {(uploadHistory.length > 0 || hasOrphanedData) && (
+            <Button
+              variant="destructive"
+              onClick={() => setDeleteAllDialogOpen(true)}
+              disabled={deleting}
+              className="w-full sm:w-auto"
+            >
+              {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              HAPUS SEMUA
+            </Button>
+          )}
+        </div>
+
+        {/* Card Content */}
+        <div className="p-4 sm:p-6">
           {uploadHistory.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-12">
+              <div className="w-16 h-16 border-3 border-border bg-muted flex items-center justify-center mx-auto mb-4">
+                <FileText className="w-8 h-8" />
+              </div>
               {hasOrphanedData ? (
-                <div className="space-y-4">
-                  <p>Tidak ada riwayat upload, tetapi ada data lama di sistem.</p>
-                  <p className="text-sm">
-                    Gunakan tombol "Hapus Semua Data" untuk menghapus data lama ini.
+                <div className="space-y-2">
+                  <p className="font-brutal">TIDAK ADA RIWAYAT UPLOAD</p>
+                  <p className="font-mono text-sm text-muted-foreground">
+                    Ada data lama di sistem. Gunakan "Hapus Semua" untuk menghapus.
                   </p>
                 </div>
               ) : (
-                <p>Belum ada riwayat upload</p>
+                <p className="font-mono text-muted-foreground">Belum ada riwayat upload</p>
               )}
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {uploadHistory.map((history) => (
                 <div
                   key={history.id}
-                  className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
+                  className="border-3 border-border p-4 bg-card hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all"
                 >
-                  <div className="flex items-center gap-4 flex-1">
-                    <FileText className="h-8 w-8 text-primary" />
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{history.file_name}</h3>
-                      <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    {/* File Icon */}
+                    <div className="w-12 h-12 border-3 border-border bg-secondary flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-6 h-6 text-secondary-foreground" />
+                    </div>
+                    
+                    {/* File Info */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-brutal text-sm sm:text-base truncate">{history.file_name}</h3>
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 text-xs sm:text-sm font-mono text-muted-foreground">
                         <span className="flex items-center gap-1">
-                          <Calendar className="h-4 w-4" />
-                          {format(new Date(history.uploaded_at), "PPp", {
-                            locale: idLocale,
-                          })}
+                          <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                          {format(new Date(history.uploaded_at), "dd MMM yyyy", { locale: idLocale })}
                         </span>
-                        <span>{history.customers_count} customers</span>
-                        <span>{history.transactions_count} transaksi</span>
+                        <span className="flex items-center gap-1">
+                          <Users className="h-3 w-3 sm:h-4 sm:w-4" />
+                          {history.customers_count}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
+                          {history.transactions_count}
+                        </span>
                       </div>
                     </div>
+                    
+                    {/* Delete Button */}
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        setSelectedHistoryId(history.id);
+                        setDeleteDialogOpen(true);
+                      }}
+                      disabled={deleting}
+                      className="self-end sm:self-center flex-shrink-0"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      setSelectedHistoryId(history.id);
-                      setDeleteDialogOpen(true);
-                    }}
-                    disabled={deleting}
-                  >
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
                 </div>
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
+      {/* Delete Single Dialog */}
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="border-3 border-border shadow-brutal-lg mx-4 sm:mx-auto">
           <AlertDialogHeader>
-            <AlertDialogTitle>Hapus Riwayat Upload?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tindakan ini akan menghapus semua data yang terkait dengan upload ini,
-              termasuk transaksi dan segmentasi customer. Tindakan ini tidak dapat
-              dibatalkan.
+            <AlertDialogTitle className="font-brutal">HAPUS RIWAYAT UPLOAD?</AlertDialogTitle>
+            <AlertDialogDescription className="font-mono text-sm">
+              Tindakan ini akan menghapus semua data yang terkait dengan upload ini, termasuk transaksi dan segmentasi customer.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Batal</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+            <AlertDialogCancel disabled={deleting} className="w-full sm:w-auto">BATAL</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => selectedHistoryId && handleDeleteHistory(selectedHistoryId)}
               disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="w-full sm:w-auto"
             >
               {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Hapus
+              HAPUS
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Delete All Dialog */}
       <AlertDialog open={deleteAllDialogOpen} onOpenChange={setDeleteAllDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="border-3 border-border shadow-brutal-lg mx-4 sm:mx-auto">
           <AlertDialogHeader>
-            <AlertDialogTitle>Hapus Semua Data?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tindakan ini akan menghapus SEMUA data Anda termasuk transaksi,
-              segmentasi customer, dan riwayat upload. Tindakan ini tidak dapat
-              dibatalkan.
+            <AlertDialogTitle className="font-brutal">HAPUS SEMUA DATA?</AlertDialogTitle>
+            <AlertDialogDescription className="font-mono text-sm">
+              Tindakan ini akan menghapus SEMUA data Anda termasuk transaksi, segmentasi customer, dan riwayat upload.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Batal</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+            <AlertDialogCancel disabled={deleting} className="w-full sm:w-auto">BATAL</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteAllData}
               disabled={deleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="w-full sm:w-auto"
             >
               {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Hapus Semua
+              HAPUS SEMUA
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

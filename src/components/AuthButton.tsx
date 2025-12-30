@@ -13,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Profile {
   full_name: string | null;
@@ -28,7 +27,6 @@ export const AuthButton = () => {
   const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -39,7 +37,6 @@ export const AuthButton = () => {
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -87,11 +84,18 @@ export const AuthButton = () => {
   if (!user) {
     return (
       <div className="flex gap-2">
-        <Button variant="ghost" onClick={() => navigate("/auth")}>
-          Login
+        <Button 
+          variant="outline" 
+          onClick={() => navigate("/auth")}
+          className="text-xs sm:text-sm px-3 sm:px-4"
+        >
+          LOGIN
         </Button>
-        <Button onClick={() => navigate("/auth")}>
-          Sign Up
+        <Button 
+          onClick={() => navigate("/auth")}
+          className="text-xs sm:text-sm px-3 sm:px-4"
+        >
+          SIGN UP
         </Button>
       </div>
     );
@@ -114,32 +118,33 @@ export const AuthButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src={profile?.avatar_url || undefined} alt={displayName} />
-            <AvatarFallback className="bg-primary text-primary-foreground">
-              {getInitials()}
-            </AvatarFallback>
-          </Avatar>
-        </Button>
+        <button className="w-10 h-10 sm:w-12 sm:h-12 border-3 border-border bg-foreground text-background flex items-center justify-center font-brutal text-sm shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all">
+          {getInitials()}
+        </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end">
+      <DropdownMenuContent className="w-56 border-3 border-border bg-card shadow-brutal" align="end">
         <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{displayName}</p>
-            <p className="text-xs leading-none text-muted-foreground">
+            <p className="text-sm font-brutal">{displayName}</p>
+            <p className="text-xs font-mono text-muted-foreground truncate">
               {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigate("/profile")}>
+        <DropdownMenuSeparator className="bg-border h-[3px]" />
+        <DropdownMenuItem 
+          onClick={() => navigate("/profile")}
+          className="font-mono text-sm cursor-pointer hover:bg-muted"
+        >
           <UserCircle className="mr-2 h-4 w-4" />
-          Edit Profil
+          EDIT PROFIL
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSignOut}>
+        <DropdownMenuItem 
+          onClick={handleSignOut}
+          className="font-mono text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+        >
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          LOGOUT
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

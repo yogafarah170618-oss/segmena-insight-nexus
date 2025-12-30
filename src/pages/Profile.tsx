@@ -4,10 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Upload, User } from "lucide-react";
+import { Loader2, User, ArrowLeft } from "lucide-react";
 
 interface Profile {
   id: string;
@@ -123,14 +121,6 @@ const Profile = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
   const getInitials = (name: string) => {
     if (!name || !name.trim()) {
       return userData?.email?.charAt(0).toUpperCase() || "U";
@@ -143,54 +133,78 @@ const Profile = () => {
       .slice(0, 2);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center dotted-bg">
+        <div className="w-12 h-12 border-3 border-border bg-card flex items-center justify-center shadow-brutal">
+          <Loader2 className="h-6 w-6 animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container max-w-4xl mx-auto p-6 space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold mb-2">Profil Saya</h1>
-        <p className="text-muted-foreground">
-          Kelola informasi profil Anda
-        </p>
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 space-y-6">
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => navigate("/")}
+          className="flex-shrink-0"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <div className="border-3 border-border p-4 sm:p-6 bg-foreground text-background shadow-brutal flex-1">
+          <h1 className="text-2xl sm:text-4xl font-brutal mb-2">PROFIL SAYA</h1>
+          <p className="font-mono text-sm text-background/70">Kelola informasi profil Anda</p>
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Informasi Profil</CardTitle>
-          <CardDescription>
-            Perbarui informasi profil dan foto Anda
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      {/* Main Card */}
+      <div className="border-3 border-border bg-card shadow-brutal max-w-2xl">
+        {/* Card Header */}
+        <div className="p-4 sm:p-6 border-b-3 border-border">
+          <h2 className="text-xl font-brutal">INFORMASI PROFIL</h2>
+          <p className="font-mono text-sm text-muted-foreground">Perbarui informasi profil Anda</p>
+        </div>
+
+        {/* Card Content */}
+        <div className="p-4 sm:p-6">
           <form onSubmit={handleSave} className="space-y-6">
-            <div className="flex items-center gap-6">
-              <Avatar className="h-24 w-24">
-                <AvatarImage src={avatarUrl} alt={fullName} />
-                <AvatarFallback className="text-2xl">
-                  {fullName ? getInitials(fullName) : <User />}
-                </AvatarFallback>
-              </Avatar>
-              <div className="space-y-2 flex-1">
-                <Label htmlFor="avatar">URL Avatar</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="avatar"
-                    type="url"
-                    placeholder="https://example.com/avatar.jpg"
-                    value={avatarUrl}
-                    onChange={(e) => setAvatarUrl(e.target.value)}
-                    disabled={saving}
-                  />
-                  <Button type="button" variant="outline" size="icon" disabled={saving}>
-                    <Upload className="h-4 w-4" />
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
+            {/* Avatar Section */}
+            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+              {/* Avatar Preview */}
+              <div className="w-20 h-20 sm:w-24 sm:h-24 border-3 border-border bg-secondary flex items-center justify-center flex-shrink-0 overflow-hidden">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" />
+                ) : (
+                  <span className="font-brutal text-2xl sm:text-3xl text-secondary-foreground">
+                    {getInitials(fullName)}
+                  </span>
+                )}
+              </div>
+              
+              {/* Avatar URL Input */}
+              <div className="space-y-2 flex-1 w-full">
+                <Label htmlFor="avatar" className="font-brutal text-xs tracking-wider">URL AVATAR</Label>
+                <Input
+                  id="avatar"
+                  type="url"
+                  placeholder="https://example.com/avatar.jpg"
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  disabled={saving}
+                />
+                <p className="text-xs font-mono text-muted-foreground">
                   Masukkan URL gambar untuk avatar Anda
                 </p>
               </div>
             </div>
 
+            {/* Email Field */}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="font-brutal text-xs tracking-wider">EMAIL</Label>
               <Input
                 id="email"
                 type="email"
@@ -198,14 +212,15 @@ const Profile = () => {
                 disabled
                 className="bg-muted cursor-not-allowed"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs font-mono text-muted-foreground">
                 Email tidak dapat diubah
               </p>
             </div>
 
+            {/* Full Name Field */}
             <div className="space-y-2">
-              <Label htmlFor="fullName">
-                Nama Lengkap <span className="text-muted-foreground text-xs">(Opsional)</span>
+              <Label htmlFor="fullName" className="font-brutal text-xs tracking-wider">
+                NAMA LENGKAP <span className="text-muted-foreground">(OPSIONAL)</span>
               </Label>
               <Input
                 id="fullName"
@@ -215,28 +230,30 @@ const Profile = () => {
                 onChange={(e) => setFullName(e.target.value)}
                 disabled={saving}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs font-mono text-muted-foreground">
                 Nama akan ditampilkan di profil Anda
               </p>
             </div>
 
-            <div className="flex gap-4">
-              <Button type="submit" disabled={saving}>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button type="submit" disabled={saving} className="w-full sm:w-auto">
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Simpan Perubahan
+                SIMPAN
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => navigate("/")}
                 disabled={saving}
+                className="w-full sm:w-auto"
               >
-                Batal
+                BATAL
               </Button>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
