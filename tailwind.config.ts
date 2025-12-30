@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        'mono': ['Space Mono', 'monospace'],
+        'brutal': ['Archivo Black', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -58,19 +62,15 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
-      backgroundImage: {
-        'gradient-primary': 'var(--gradient-primary)',
-        'gradient-glow': 'var(--gradient-glow)',
-      },
       boxShadow: {
-        'glow': 'var(--glow-primary)',
-        'glow-secondary': 'var(--glow-secondary)',
-        'glass': 'var(--shadow-glass)',
+        'brutal': 'var(--brutal-shadow)',
+        'brutal-lg': 'var(--brutal-shadow-lg)',
+        'brutal-hover': 'var(--brutal-shadow-hover)',
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius))",
+        sm: "calc(var(--radius))",
       },
       keyframes: {
         "accordion-down": {
@@ -89,10 +89,16 @@ export default {
             height: "0",
           },
         },
+        "shake": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "25%": { transform: "translateX(-4px) rotate(-1deg)" },
+          "75%": { transform: "translateX(4px) rotate(1deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "shake": "shake 0.3s ease-in-out",
       },
     },
   },

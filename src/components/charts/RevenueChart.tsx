@@ -22,12 +22,12 @@ export const RevenueChart = ({ data }: RevenueChartProps) => {
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="glass-card-strong p-4 border border-border rounded-lg">
-          <p className="text-sm font-semibold mb-2">{payload[0].payload.date}</p>
-          <p className="text-sm text-primary">
+        <div className="border-3 border-border bg-card p-4 shadow-brutal font-mono">
+          <p className="font-brutal text-sm mb-2">{payload[0].payload.date}</p>
+          <p className="text-sm">
             Revenue: {formatCurrency(payload[0].value)}
           </p>
-          <p className="text-sm text-secondary">
+          <p className="text-sm">
             Transaksi: {payload[1].value}
           </p>
         </div>
@@ -37,52 +37,57 @@ export const RevenueChart = ({ data }: RevenueChartProps) => {
   };
 
   return (
-    <Card className="glass-card-strong">
+    <Card className="hover:translate-x-0 hover:translate-y-0 hover:shadow-brutal">
       <CardHeader>
-        <CardTitle>Revenue Trend</CardTitle>
+        <CardTitle>REVENUE TREND</CardTitle>
         <CardDescription>Revenue dan transaksi per bulan</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <CartesianGrid strokeDasharray="0" stroke="hsl(var(--border))" strokeWidth={2} />
             <XAxis 
               dataKey="date" 
-              stroke="hsl(var(--muted-foreground))"
-              fontSize={12}
+              stroke="hsl(var(--foreground))"
+              fontSize={11}
+              fontFamily="Space Mono"
             />
             <YAxis 
               yAxisId="left"
-              stroke="hsl(var(--primary))"
-              fontSize={12}
+              stroke="hsl(var(--foreground))"
+              fontSize={11}
+              fontFamily="Space Mono"
               tickFormatter={formatCurrency}
             />
             <YAxis 
               yAxisId="right"
               orientation="right"
               stroke="hsl(var(--secondary))"
-              fontSize={12}
+              fontSize={11}
+              fontFamily="Space Mono"
             />
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
+            <Legend 
+              wrapperStyle={{ fontFamily: 'Space Mono', fontSize: '12px' }}
+            />
             <Line
               yAxisId="left"
-              type="monotone"
+              type="linear"
               dataKey="revenue"
-              stroke="hsl(var(--primary))"
+              stroke="hsl(var(--foreground))"
               strokeWidth={3}
               name="Revenue"
-              dot={{ fill: 'hsl(var(--primary))', r: 4 }}
-              activeDot={{ r: 6 }}
+              dot={{ fill: 'hsl(var(--foreground))', r: 6, strokeWidth: 2 }}
+              activeDot={{ r: 8, strokeWidth: 3 }}
             />
             <Line
               yAxisId="right"
-              type="monotone"
+              type="linear"
               dataKey="transactions"
               stroke="hsl(var(--secondary))"
-              strokeWidth={2}
+              strokeWidth={3}
               name="Transaksi"
-              dot={{ fill: 'hsl(var(--secondary))', r: 4 }}
+              dot={{ fill: 'hsl(var(--secondary))', r: 6, strokeWidth: 2 }}
             />
           </LineChart>
         </ResponsiveContainer>

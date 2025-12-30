@@ -13,9 +13,9 @@ export const SegmentPieChart = ({ data }: SegmentPieChartProps) => {
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="glass-card-strong p-4 border border-border rounded-lg">
-          <p className="text-sm font-semibold mb-1 text-foreground">{payload[0].name}</p>
-          <p className="text-sm text-foreground font-medium">
+        <div className="border-3 border-border bg-card p-4 shadow-brutal font-mono">
+          <p className="font-brutal text-sm mb-1">{payload[0].name.toUpperCase()}</p>
+          <p className="text-sm">
             {payload[0].value} customers ({((payload[0].value / data.reduce((sum, d) => sum + d.value, 0)) * 100).toFixed(1)}%)
           </p>
         </div>
@@ -35,9 +35,10 @@ export const SegmentPieChart = ({ data }: SegmentPieChartProps) => {
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
+        textAnchor="middle"
         dominantBaseline="central"
-        className="text-xs font-semibold"
+        className="text-xs font-brutal"
+        style={{ fontFamily: 'Archivo Black' }}
       >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
@@ -45,9 +46,9 @@ export const SegmentPieChart = ({ data }: SegmentPieChartProps) => {
   };
 
   return (
-    <Card className="glass-card-strong">
+    <Card className="hover:translate-x-0 hover:translate-y-0 hover:shadow-brutal">
       <CardHeader>
-        <CardTitle>Segment Distribution</CardTitle>
+        <CardTitle>SEGMENT DISTRIBUTION</CardTitle>
         <CardDescription>Distribusi customer per segment</CardDescription>
       </CardHeader>
       <CardContent>
@@ -62,13 +63,17 @@ export const SegmentPieChart = ({ data }: SegmentPieChartProps) => {
               outerRadius={100}
               fill="#8884d8"
               dataKey="value"
+              stroke="hsl(var(--background))"
+              strokeWidth={3}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
-            <Legend />
+            <Legend 
+              wrapperStyle={{ fontFamily: 'Space Mono', fontSize: '11px' }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
