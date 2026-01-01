@@ -18,8 +18,8 @@ const SidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
   <div className="flex flex-col items-center py-6 space-y-6">
     {/* Logo */}
     <NavLink to="/" className="mb-2 group" onClick={onNavClick}>
-      <div className="w-14 h-14 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-        <img src={segmenaLogo} alt="Segmena Logo" className="w-14 h-14 object-contain drop-shadow-sm transition-all duration-300 group-hover:drop-shadow-lg" />
+      <div className="w-14 h-14 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 border-3 border-foreground rounded-lg bg-card p-1">
+        <img src={segmenaLogo} alt="Segmena Logo" className="w-full h-full object-contain drop-shadow-sm transition-all duration-300 group-hover:drop-shadow-lg" />
       </div>
     </NavLink>
 
@@ -48,8 +48,8 @@ const MobileSidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
     {/* Logo */}
     <div className="px-4 mb-6">
       <NavLink to="/" onClick={onNavClick} className="flex items-center gap-3 group">
-        <div className="w-12 h-12 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-          <img src={segmenaLogo} alt="Segmena Logo" className="w-12 h-12 object-contain drop-shadow-sm transition-all duration-300 group-hover:drop-shadow-lg" />
+        <div className="w-12 h-12 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 border-3 border-foreground rounded-lg bg-card p-1">
+          <img src={segmenaLogo} alt="Segmena Logo" className="w-full h-full object-contain drop-shadow-sm transition-all duration-300 group-hover:drop-shadow-lg" />
         </div>
         <span className="font-brutal text-xl">SEGMENA</span>
       </NavLink>
