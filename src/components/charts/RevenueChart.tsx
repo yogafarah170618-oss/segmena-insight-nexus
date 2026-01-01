@@ -38,56 +38,59 @@ export const RevenueChart = ({ data }: RevenueChartProps) => {
 
   return (
     <Card className="hover:translate-x-0 hover:translate-y-0 hover:shadow-brutal">
-      <CardHeader>
-        <CardTitle>REVENUE TREND</CardTitle>
-        <CardDescription>Revenue dan transaksi per bulan</CardDescription>
+      <CardHeader className="p-4 sm:p-6">
+        <CardTitle className="text-base sm:text-xl">REVENUE TREND</CardTitle>
+        <CardDescription className="text-xs sm:text-sm">Revenue dan transaksi per bulan</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="0" stroke="hsl(var(--border))" strokeWidth={2} />
+      <CardContent className="p-2 sm:p-6">
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={data} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="0" stroke="hsl(var(--border))" strokeWidth={1} />
             <XAxis 
               dataKey="date" 
               stroke="hsl(var(--foreground))"
-              fontSize={11}
+              fontSize={9}
               fontFamily="Space Mono"
+              tick={{ fontSize: 9 }}
             />
             <YAxis 
               yAxisId="left"
               stroke="hsl(var(--foreground))"
-              fontSize={11}
+              fontSize={9}
               fontFamily="Space Mono"
-              tickFormatter={formatCurrency}
+              tickFormatter={(v) => `${(v / 1000000).toFixed(0)}M`}
+              width={40}
             />
             <YAxis 
               yAxisId="right"
               orientation="right"
               stroke="hsl(var(--secondary))"
-              fontSize={11}
+              fontSize={9}
               fontFamily="Space Mono"
+              width={30}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
-              wrapperStyle={{ fontFamily: 'Space Mono', fontSize: '12px' }}
+              wrapperStyle={{ fontFamily: 'Space Mono', fontSize: '10px' }}
             />
             <Line
               yAxisId="left"
               type="linear"
               dataKey="revenue"
               stroke="hsl(var(--foreground))"
-              strokeWidth={3}
+              strokeWidth={2}
               name="Revenue"
-              dot={{ fill: 'hsl(var(--foreground))', r: 6, strokeWidth: 2 }}
-              activeDot={{ r: 8, strokeWidth: 3 }}
+              dot={{ fill: 'hsl(var(--foreground))', r: 4, strokeWidth: 1 }}
+              activeDot={{ r: 6, strokeWidth: 2 }}
             />
             <Line
               yAxisId="right"
               type="linear"
               dataKey="transactions"
               stroke="hsl(var(--secondary))"
-              strokeWidth={3}
+              strokeWidth={2}
               name="Transaksi"
-              dot={{ fill: 'hsl(var(--secondary))', r: 6, strokeWidth: 2 }}
+              dot={{ fill: 'hsl(var(--secondary))', r: 4, strokeWidth: 1 }}
             />
           </LineChart>
         </ResponsiveContainer>

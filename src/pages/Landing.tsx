@@ -76,55 +76,55 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen dotted-bg">
+    <div className="min-h-screen dotted-bg overflow-x-hidden">
       {/* Marquee Banner */}
       <div className="bg-foreground text-background py-2 overflow-hidden border-b-3 border-border">
-        <div className="marquee whitespace-nowrap font-brutal text-sm tracking-wider">
+        <div className="marquee whitespace-nowrap font-brutal text-xs sm:text-sm tracking-wider">
           ★ CUSTOMER INTELLIGENCE PLATFORM ★ SEGMENTASI OTOMATIS ★ INSIGHT SIAP PAKAI ★ MUDAH DIGUNAKAN ★ CUSTOMER INTELLIGENCE PLATFORM ★ SEGMENTASI OTOMATIS ★ INSIGHT SIAP PAKAI ★ MUDAH DIGUNAKAN ★
         </div>
       </div>
 
       {/* Hero Section */}
-      <section className="min-h-[90vh] flex items-center justify-center py-20">
-        <div className="container mx-auto px-4 sm:px-6">
+      <section className="min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center py-8 sm:py-20">
+        <div className="container mx-auto px-3 sm:px-6">
           <div className="max-w-5xl mx-auto">
             {/* Main Title */}
-            <div className="mb-12 text-center">
-              <h1 className="text-6xl sm:text-8xl md:text-[10rem] font-brutal leading-none tracking-tight mb-6">
+            <div className="mb-6 sm:mb-12 text-center">
+              <h1 className="text-4xl xs:text-5xl sm:text-8xl md:text-[10rem] font-brutal leading-none tracking-tight mb-3 sm:mb-6">
                 SEGMENA
               </h1>
-              <div className="inline-block bg-secondary px-6 py-2 border-3 border-border shadow-brutal -rotate-2 mb-8">
-                <span className="font-brutal text-secondary-foreground text-lg sm:text-xl">
+              <div className="inline-block bg-secondary px-3 sm:px-6 py-1.5 sm:py-2 border-3 border-border shadow-brutal -rotate-2 mb-4 sm:mb-8">
+                <span className="font-brutal text-secondary-foreground text-xs sm:text-lg md:text-xl">
                   CUSTOMER INTELLIGENCE
                 </span>
               </div>
-              <p className="text-lg sm:text-xl font-mono max-w-2xl mx-auto mb-12">
+              <p className="text-sm sm:text-lg md:text-xl font-mono max-w-2xl mx-auto mb-6 sm:mb-12 px-2">
                 Platform Customer Intelligence untuk UMKM. Segmentasi otomatis, insight siap pakai, mudah digunakan.
               </p>
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 justify-center mb-8 sm:mb-16 px-2">
               <Button
                 size="lg"
                 onClick={() => navigate("/upload")}
-                className="text-lg px-10 py-6"
+                className="text-sm sm:text-lg px-6 sm:px-10 py-4 sm:py-6 w-full sm:w-auto"
               >
                 Upload Data
-                <ArrowRight className="ml-2 w-5 h-5" />
+                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 onClick={() => navigate("/dashboard")}
-                className="text-lg px-10 py-6"
+                className="text-sm sm:text-lg px-6 sm:px-10 py-4 sm:py-6 w-full sm:w-auto"
               >
                 Try Demo
               </Button>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 max-w-4xl mx-auto px-2 sm:px-0">
               {[
                 { label: "TOTAL CUSTOMERS", value: stats.totalCustomers },
                 { label: "ACTIVE SEGMENTS", value: stats.activeSegments },
@@ -132,30 +132,30 @@ const Landing = () => {
               ].map((stat, i) => (
                 <div 
                   key={i} 
-                  className={`border-3 border-border p-6 bg-card shadow-brutal ${
+                  className={`border-3 border-border p-4 sm:p-6 bg-card shadow-brutal ${
                     i === 1 ? 'bg-secondary text-secondary-foreground' : ''
                   }`}
                 >
-                  <div className="text-xs font-mono mb-2 opacity-70">{stat.label}</div>
-                  <div className="text-3xl sm:text-4xl font-brutal">{stat.value}</div>
+                  <div className="text-[10px] sm:text-xs font-mono mb-1 sm:mb-2 opacity-70">{stat.label}</div>
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-brutal">{stat.value}</div>
                 </div>
               ))}
             </div>
 
-            {/* Dashboard Preview */}
-            <div className="mt-16 border-3 border-border p-6 bg-card shadow-brutal-lg">
-              <div className="flex items-center justify-between border-b-3 border-border pb-4 mb-6">
-                <div className="flex gap-2">
-                  <div className="w-4 h-4 bg-accent border-2 border-border"></div>
-                  <div className="w-4 h-4 bg-secondary border-2 border-border"></div>
-                  <div className="w-4 h-4 bg-foreground border-2 border-border"></div>
+            {/* Dashboard Preview - Hidden on very small screens */}
+            <div className="mt-8 sm:mt-16 border-3 border-border p-4 sm:p-6 bg-card shadow-brutal-lg mx-2 sm:mx-0">
+              <div className="flex items-center justify-between border-b-3 border-border pb-3 sm:pb-4 mb-4 sm:mb-6">
+                <div className="flex gap-1.5 sm:gap-2">
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-accent border-2 border-border"></div>
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-secondary border-2 border-border"></div>
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-foreground border-2 border-border"></div>
                 </div>
-                <span className="font-mono text-sm">DASHBOARD.EXE</span>
+                <span className="font-mono text-xs sm:text-sm">DASHBOARD.EXE</span>
               </div>
-              <div className="h-48 sm:h-64 flex items-center justify-center striped-bg border-3 border-border">
+              <div className="h-32 sm:h-48 md:h-64 flex items-center justify-center striped-bg border-3 border-border">
                 <div className="text-center">
-                  <BarChart3 className="w-16 h-16 mx-auto mb-4" />
-                  <p className="font-brutal text-lg">
+                  <BarChart3 className="w-10 h-10 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-4" />
+                  <p className="font-brutal text-sm sm:text-lg">
                     {isLoggedIn ? "YOUR ANALYTICS" : "ANALYTICS DASHBOARD"}
                   </p>
                 </div>
@@ -166,18 +166,18 @@ const Landing = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 border-t-3 border-border">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl sm:text-6xl font-brutal mb-4">
+      <section className="py-10 sm:py-20 border-t-3 border-border">
+        <div className="container mx-auto px-3 sm:px-6">
+          <div className="text-center mb-8 sm:mb-16">
+            <h2 className="text-2xl sm:text-4xl md:text-6xl font-brutal mb-2 sm:mb-4">
               KEUNGGULAN
             </h2>
-            <div className="inline-block bg-accent text-accent-foreground px-4 py-1 rotate-1 border-3 border-border shadow-brutal">
-              <span className="font-mono">PLATFORM KAMI</span>
+            <div className="inline-block bg-accent text-accent-foreground px-3 sm:px-4 py-1 rotate-1 border-3 border-border shadow-brutal">
+              <span className="font-mono text-xs sm:text-base">PLATFORM KAMI</span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-3 max-w-6xl mx-auto px-2 sm:px-0">
             {[
               {
                 icon: Target,
@@ -200,13 +200,13 @@ const Landing = () => {
             ].map((feature, i) => (
               <div
                 key={i}
-                className="border-3 border-border p-8 bg-card shadow-brutal hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-brutal-lg transition-all group"
+                className="border-3 border-border p-5 sm:p-8 bg-card shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all group"
               >
-                <div className={`w-16 h-16 ${feature.highlight} border-3 border-border flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform`}>
-                  <feature.icon className="w-8 h-8" />
+                <div className={`w-12 h-12 sm:w-16 sm:h-16 ${feature.highlight} border-3 border-border flex items-center justify-center mb-4 sm:mb-6 group-hover:rotate-6 transition-transform`}>
+                  <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
-                <h3 className="text-xl font-brutal mb-4">{feature.title}</h3>
-                <p className="font-mono text-sm text-muted-foreground leading-relaxed">
+                <h3 className="text-base sm:text-xl font-brutal mb-2 sm:mb-4">{feature.title}</h3>
+                <p className="font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -216,18 +216,18 @@ const Landing = () => {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-20 border-t-3 border-border bg-foreground text-background">
-        <div className="container mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-4xl sm:text-6xl font-brutal mb-8">
+      <section className="py-10 sm:py-20 border-t-3 border-border bg-foreground text-background">
+        <div className="container mx-auto px-3 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-brutal mb-4 sm:mb-8">
             MULAI SEKARANG
           </h2>
           <Button
             size="lg"
             onClick={() => navigate("/auth")}
-            className="bg-secondary text-secondary-foreground text-lg px-12 py-6 hover:bg-secondary/90"
+            className="bg-secondary text-secondary-foreground text-sm sm:text-lg px-8 sm:px-12 py-4 sm:py-6 hover:bg-secondary/90 w-full sm:w-auto max-w-xs sm:max-w-none"
           >
             DAFTAR GRATIS
-            <ArrowRight className="ml-2 w-5 h-5" />
+            <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
         </div>
       </section>

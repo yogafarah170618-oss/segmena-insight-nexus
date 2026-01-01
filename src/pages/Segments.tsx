@@ -381,12 +381,12 @@ const Segments = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen p-8 space-y-8">
-        <div className="border-3 border-border p-4 bg-muted">
-          <Skeleton className="h-12 w-1/3 bg-border" />
+      <div className="min-h-screen p-4 sm:p-8 space-y-4 sm:space-y-8">
+        <div className="border-3 border-border p-3 sm:p-4 bg-muted">
+          <Skeleton className="h-8 sm:h-12 w-1/2 sm:w-1/3 bg-border" />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 border-3 border-border" />)}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-20 sm:h-32 border-3 border-border" />)}
         </div>
       </div>
     );
@@ -394,16 +394,16 @@ const Segments = () => {
 
   if (customers.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-8 dotted-bg">
-        <div className="border-3 border-border p-12 bg-card shadow-brutal-lg text-center max-w-md">
-          <div className="w-20 h-20 border-3 border-border bg-muted flex items-center justify-center mx-auto mb-6">
-            <Users className="w-10 h-10" />
+      <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 dotted-bg">
+        <div className="border-3 border-border p-6 sm:p-12 bg-card shadow-brutal-lg text-center max-w-md mx-4">
+          <div className="w-14 h-14 sm:w-20 sm:h-20 border-3 border-border bg-muted flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <Users className="w-7 h-7 sm:w-10 sm:h-10" />
           </div>
-          <h2 className="text-3xl font-brutal mb-4">TIDAK ADA DATA</h2>
-          <p className="font-mono text-muted-foreground mb-8">
+          <h2 className="text-xl sm:text-3xl font-brutal mb-2 sm:mb-4">TIDAK ADA DATA</h2>
+          <p className="font-mono text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-8">
             Belum ada customer di segmen {segmentName}
           </p>
-          <Button onClick={() => navigate("/dashboard")}>
+          <Button onClick={() => navigate("/dashboard")} className="w-full sm:w-auto">
             <ArrowLeft className="mr-2 h-4 w-4" />
             KEMBALI
           </Button>
@@ -413,25 +413,25 @@ const Segments = () => {
   }
 
   return (
-    <div className="min-h-screen p-4 sm:p-8 space-y-8">
+    <div className="min-h-screen p-3 sm:p-4 md:p-8 space-y-4 sm:space-y-6 md:space-y-8 overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-2 sm:gap-4">
         <Button
           variant="outline"
           size="icon"
           onClick={() => navigate("/dashboard")}
-          className="flex-shrink-0"
+          className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </Button>
-        <div>
-          <h1 className="text-4xl sm:text-5xl font-brutal mb-2">{segmentName.toUpperCase()}</h1>
-          <p className="font-mono text-muted-foreground">{getSegmentDescription(segmentName)}</p>
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-4xl md:text-5xl font-brutal mb-1 sm:mb-2 truncate">{segmentName.toUpperCase()}</h1>
+          <p className="font-mono text-xs sm:text-sm text-muted-foreground line-clamp-2">{getSegmentDescription(segmentName)}</p>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
         {[
           { icon: Users, label: "TOTAL CUSTOMERS", value: stats.totalCustomers, style: 'bg-card' },
           { icon: DollarSign, label: "AVG. SPEND", value: formatCurrency(stats.avgSpend), style: 'bg-secondary text-secondary-foreground' },
@@ -440,37 +440,83 @@ const Segments = () => {
         ].map((stat, i) => (
           <div 
             key={i} 
-            className={`border-3 border-border p-6 shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all ${stat.style}`}
+            className={`border-3 border-border p-3 sm:p-6 shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all ${stat.style}`}
           >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 border-3 border-current flex items-center justify-center">
-                <stat.icon className="w-5 h-5" />
+            <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 border-3 border-current flex items-center justify-center">
+                <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>
-            <div className="text-2xl font-brutal mb-1">{stat.value}</div>
-            <div className="text-xs font-mono opacity-70">{stat.label}</div>
+            <div className="text-base sm:text-2xl font-brutal mb-0.5 sm:mb-1 truncate">{stat.value}</div>
+            <div className="text-[9px] sm:text-xs font-mono opacity-70">{stat.label}</div>
           </div>
         ))}
       </div>
 
       {/* Customers Table */}
       <div>
-        <div className="flex items-center gap-4 mb-6">
-          <h2 className="text-2xl font-brutal">CUSTOMERS IN SEGMENT</h2>
-          <div className="flex-1 h-1 bg-border"></div>
+        <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-6">
+          <h2 className="text-lg sm:text-2xl font-brutal whitespace-nowrap">CUSTOMERS IN SEGMENT</h2>
+          <div className="flex-1 h-0.5 sm:h-1 bg-border"></div>
         </div>
         <div className="border-3 border-border bg-card shadow-brutal overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile Card View */}
+          <div className="block sm:hidden">
+            {customers.map((customer, i) => (
+              <div key={i} className="p-3 border-b-3 border-border last:border-b-0">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="font-mono text-xs bg-muted px-2 py-1 border border-border truncate max-w-[140px]">
+                    {customer.customer_id}
+                  </span>
+                  <div className="flex gap-1">
+                    <span className="text-[10px] font-mono bg-foreground text-background px-1.5 py-0.5">
+                      R:{customer.recency_score}
+                    </span>
+                    <span className="text-[10px] font-mono bg-secondary text-secondary-foreground px-1.5 py-0.5">
+                      F:{customer.frequency_score}
+                    </span>
+                    <span className="text-[10px] font-mono bg-muted px-1.5 py-0.5">
+                      M:{customer.monetary_score}
+                    </span>
+                  </div>
+                </div>
+                {customer.customer_name && (
+                  <p className="font-mono text-sm mb-2">{customer.customer_name}</p>
+                )}
+                <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                  <div>
+                    <span className="text-muted-foreground">Transactions: </span>
+                    <span className="font-bold">{customer.total_transactions}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Total: </span>
+                    <span className="font-bold">{formatCurrency(customer.total_spend)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Avg: </span>
+                    <span>{formatCurrency(customer.avg_spend)}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Last: </span>
+                    <span>{new Date(customer.last_transaction_date).toLocaleDateString('id-ID')}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Desktop Table View */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b-3 border-border bg-muted">
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">CUSTOMER ID</th>
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">NAME</th>
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">TRANSACTIONS</th>
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">TOTAL SPEND</th>
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">AVG SPEND</th>
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">LAST PURCHASE</th>
-                  <th className="text-left p-4 text-xs font-brutal tracking-wider">RFM SCORE</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider">CUSTOMER ID</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider">NAME</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider">TRANS</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider">TOTAL SPEND</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider hidden lg:table-cell">AVG SPEND</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider hidden lg:table-cell">LAST</th>
+                  <th className="text-left p-3 sm:p-4 text-[10px] sm:text-xs font-brutal tracking-wider">RFM</th>
                 </tr>
               </thead>
               <tbody>
@@ -479,29 +525,29 @@ const Segments = () => {
                     key={i}
                     className="border-b-3 border-border hover:bg-muted/50 transition-colors"
                   >
-                    <td className="p-4">
-                      <span className="font-mono text-sm bg-muted px-2 py-1 border border-border">
+                    <td className="p-3 sm:p-4">
+                      <span className="font-mono text-xs sm:text-sm bg-muted px-1.5 sm:px-2 py-0.5 sm:py-1 border border-border">
                         {customer.customer_id}
                       </span>
                     </td>
-                    <td className="p-4 font-mono">
+                    <td className="p-3 sm:p-4 font-mono text-sm">
                       {customer.customer_name || <span className="text-muted-foreground">-</span>}
                     </td>
-                    <td className="p-4 font-mono">{customer.total_transactions}</td>
-                    <td className="p-4 font-mono font-bold">{formatCurrency(customer.total_spend)}</td>
-                    <td className="p-4 font-mono">{formatCurrency(customer.avg_spend)}</td>
-                    <td className="p-4 font-mono text-muted-foreground">
+                    <td className="p-3 sm:p-4 font-mono text-sm">{customer.total_transactions}</td>
+                    <td className="p-3 sm:p-4 font-mono text-sm font-bold">{formatCurrency(customer.total_spend)}</td>
+                    <td className="p-3 sm:p-4 font-mono text-sm hidden lg:table-cell">{formatCurrency(customer.avg_spend)}</td>
+                    <td className="p-3 sm:p-4 font-mono text-sm text-muted-foreground hidden lg:table-cell">
                       {new Date(customer.last_transaction_date).toLocaleDateString('id-ID')}
                     </td>
-                    <td className="p-4">
+                    <td className="p-3 sm:p-4">
                       <div className="flex gap-1">
-                        <span className="text-xs font-mono bg-foreground text-background px-2 py-0.5">
+                        <span className="text-[10px] sm:text-xs font-mono bg-foreground text-background px-1.5 sm:px-2 py-0.5">
                           R:{customer.recency_score}
                         </span>
-                        <span className="text-xs font-mono bg-secondary text-secondary-foreground px-2 py-0.5">
+                        <span className="text-[10px] sm:text-xs font-mono bg-secondary text-secondary-foreground px-1.5 sm:px-2 py-0.5">
                           F:{customer.frequency_score}
                         </span>
-                        <span className="text-xs font-mono bg-muted px-2 py-0.5">
+                        <span className="text-[10px] sm:text-xs font-mono bg-muted px-1.5 sm:px-2 py-0.5">
                           M:{customer.monetary_score}
                         </span>
                       </div>
@@ -516,25 +562,25 @@ const Segments = () => {
 
       {/* Strategies */}
       <div>
-        <div className="flex items-center gap-4 mb-6">
-          <h2 className="text-2xl font-brutal">RECOMMENDED STRATEGIES</h2>
-          <div className="flex-1 h-1 bg-border"></div>
+        <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-6">
+          <h2 className="text-lg sm:text-2xl font-brutal whitespace-nowrap">RECOMMENDED STRATEGIES</h2>
+          <div className="flex-1 h-0.5 sm:h-1 bg-border"></div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
           {getStrategies(segmentName).map((strategy, i) => (
             <div 
               key={i} 
-              className="border-3 border-border p-6 bg-card shadow-brutal hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-brutal-lg transition-all cursor-pointer group"
+              className="border-3 border-border p-4 sm:p-6 bg-card shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg transition-all cursor-pointer group"
               onClick={() => setSelectedStrategy(getStrategyDetails(segmentName, i))}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <div className="w-12 h-12 border-3 border-border bg-foreground text-background flex items-center justify-center mb-4 font-brutal text-xl">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 border-3 border-border bg-foreground text-background flex items-center justify-center mb-3 sm:mb-4 font-brutal text-base sm:text-xl">
                     {i + 1}
                   </div>
-                  <p className="font-mono text-sm text-muted-foreground leading-relaxed">{strategy}</p>
+                  <p className="font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed">{strategy}</p>
                 </div>
-                <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:translate-x-1 transition-transform flex-shrink-0 ml-2" />
               </div>
             </div>
           ))}
@@ -543,23 +589,23 @@ const Segments = () => {
 
       {/* Strategy Detail Modal */}
       <Dialog open={!!selectedStrategy} onOpenChange={() => setSelectedStrategy(null)}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto border-3 border-border shadow-brutal-lg">
+        <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto border-3 border-border shadow-brutal-lg mx-3 sm:mx-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-brutal">{selectedStrategy?.title.toUpperCase()}</DialogTitle>
-            <DialogDescription className="text-base font-mono mt-2">
+            <DialogTitle className="text-lg sm:text-2xl font-brutal">{selectedStrategy?.title.toUpperCase()}</DialogTitle>
+            <DialogDescription className="text-sm sm:text-base font-mono mt-2">
               {selectedStrategy?.description}
             </DialogDescription>
           </DialogHeader>
           
-          <div className="mt-6">
-            <h4 className="font-brutal text-sm tracking-wider mb-4">CONTOH IMPLEMENTASI:</h4>
-            <ul className="space-y-3">
+          <div className="mt-4 sm:mt-6">
+            <h4 className="font-brutal text-xs sm:text-sm tracking-wider mb-3 sm:mb-4">CONTOH IMPLEMENTASI:</h4>
+            <ul className="space-y-2 sm:space-y-3">
               {selectedStrategy?.examples.map((example, i) => (
-                <li key={i} className="flex gap-3">
-                  <span className="w-6 h-6 bg-foreground text-background flex items-center justify-center text-xs font-brutal flex-shrink-0">
+                <li key={i} className="flex gap-2 sm:gap-3">
+                  <span className="w-5 h-5 sm:w-6 sm:h-6 bg-foreground text-background flex items-center justify-center text-[10px] sm:text-xs font-brutal flex-shrink-0">
                     {i + 1}
                   </span>
-                  <span className="font-mono text-sm text-muted-foreground">{example}</span>
+                  <span className="font-mono text-xs sm:text-sm text-muted-foreground">{example}</span>
                 </li>
               ))}
             </ul>
