@@ -135,22 +135,22 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 dotted-bg">
+    <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 dotted-bg overflow-x-hidden">
       <Button
         variant="outline"
         size="icon"
-        className="fixed top-4 left-4 z-50"
+        className="fixed top-3 left-3 sm:top-4 sm:left-4 z-50 w-10 h-10 sm:w-12 sm:h-12"
         onClick={() => navigate("/")}
       >
-        <ArrowLeft className="h-5 w-5" />
+        <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
       </Button>
 
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md px-1 sm:px-0">
         {/* Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-6xl md:text-7xl font-brutal mb-4">SEGMENA</h1>
-          <div className="inline-block bg-secondary px-4 py-1 border-3 border-border shadow-brutal -rotate-1">
-            <span className="font-mono text-secondary-foreground text-sm">CUSTOMER INTELLIGENCE</span>
+        <div className="text-center mb-4 sm:mb-8">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-brutal mb-2 sm:mb-4">SEGMENA</h1>
+          <div className="inline-block bg-secondary px-3 sm:px-4 py-1 border-3 border-border shadow-brutal -rotate-1">
+            <span className="font-mono text-secondary-foreground text-xs sm:text-sm">CUSTOMER INTELLIGENCE</span>
           </div>
         </div>
 
@@ -160,7 +160,7 @@ const Auth = () => {
           <div className="grid grid-cols-2 border-b-3 border-border">
             <button
               onClick={() => setActiveTab('login')}
-              className={`py-4 font-brutal text-sm tracking-wider transition-colors ${
+              className={`py-3 sm:py-4 font-brutal text-xs sm:text-sm tracking-wider transition-colors ${
                 activeTab === 'login' 
                   ? 'bg-foreground text-background' 
                   : 'bg-card hover:bg-muted'
@@ -170,7 +170,7 @@ const Auth = () => {
             </button>
             <button
               onClick={() => setActiveTab('signup')}
-              className={`py-4 font-brutal text-sm tracking-wider transition-colors border-l-3 border-border ${
+              className={`py-3 sm:py-4 font-brutal text-xs sm:text-sm tracking-wider transition-colors border-l-3 border-border ${
                 activeTab === 'signup' 
                   ? 'bg-foreground text-background' 
                   : 'bg-card hover:bg-muted'
@@ -180,13 +180,13 @@ const Auth = () => {
             </button>
           </div>
 
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {activeTab === 'login' && (
               <>
                 {!showForgotPassword ? (
-                  <form onSubmit={handleSignIn} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="login-email" className="font-brutal text-xs tracking-wider">EMAIL</Label>
+                  <form onSubmit={handleSignIn} className="space-y-3 sm:space-y-4">
+                    <div className="space-y-1.5 sm:space-y-2">
+                      <Label htmlFor="login-email" className="font-brutal text-[10px] sm:text-xs tracking-wider">EMAIL</Label>
                       <Input
                         id="login-email"
                         type="email"
@@ -195,10 +195,11 @@ const Auth = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         disabled={loading}
+                        className="h-11 sm:h-12 text-sm sm:text-base"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="login-password" className="font-brutal text-xs tracking-wider">PASSWORD</Label>
+                    <div className="space-y-1.5 sm:space-y-2">
+                      <Label htmlFor="login-password" className="font-brutal text-[10px] sm:text-xs tracking-wider">PASSWORD</Label>
                       <div className="relative">
                         <Input
                           id="login-password"
@@ -209,7 +210,7 @@ const Auth = () => {
                           required
                           disabled={loading}
                           minLength={6}
-                          className="pr-12"
+                          className="pr-12 h-11 sm:h-12 text-sm sm:text-base"
                         />
                         <Button
                           type="button"
@@ -226,14 +227,14 @@ const Auth = () => {
                     <div className="flex justify-end">
                       <button
                         type="button"
-                        className="text-sm font-mono underline hover:no-underline"
+                        className="text-xs sm:text-sm font-mono underline hover:no-underline"
                         onClick={() => setShowForgotPassword(true)}
                         disabled={loading}
                       >
                         Lupa password?
                       </button>
                     </div>
-                    <Button type="submit" className="w-full" disabled={loading}>
+                    <Button type="submit" className="w-full h-11 sm:h-12 text-sm sm:text-base" disabled={loading}>
                       {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       LOGIN
                     </Button>
