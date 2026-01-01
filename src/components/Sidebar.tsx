@@ -19,7 +19,11 @@ const SidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
     {/* Logo */}
     <NavLink to="/" className="mb-2 group" onClick={onNavClick}>
       <div className="w-14 h-14 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-        <img src={segmenaLogo} alt="Segmena Logo" className="w-14 h-14 object-contain drop-shadow-sm transition-all duration-300 group-hover:drop-shadow-lg" />
+        <img 
+          src={segmenaLogo} 
+          alt="Segmena Logo" 
+          className="w-14 h-14 object-contain transition-all duration-300 drop-shadow-[0_0_8px_rgba(251,146,60,0.6)] group-hover:drop-shadow-[0_0_16px_rgba(251,146,60,0.9)]" 
+        />
       </div>
     </NavLink>
 
@@ -49,7 +53,11 @@ const MobileSidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
     <div className="px-4 mb-6">
       <NavLink to="/" onClick={onNavClick} className="flex items-center gap-3 group">
         <div className="w-12 h-12 flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-          <img src={segmenaLogo} alt="Segmena Logo" className="w-12 h-12 object-contain drop-shadow-sm transition-all duration-300 group-hover:drop-shadow-lg" />
+          <img 
+            src={segmenaLogo} 
+            alt="Segmena Logo" 
+            className="w-12 h-12 object-contain transition-all duration-300 drop-shadow-[0_0_8px_rgba(251,146,60,0.6)] group-hover:drop-shadow-[0_0_16px_rgba(251,146,60,0.9)]" 
+          />
         </div>
         <span className="font-brutal text-xl">SEGMENA</span>
       </NavLink>
