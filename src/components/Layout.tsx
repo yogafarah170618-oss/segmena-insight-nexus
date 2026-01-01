@@ -10,12 +10,15 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
   const location = useLocation();
-  const isLandingPage = location.pathname === "/";
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen w-full flex overflow-x-hidden">
       <Sidebar />
-      <main className={`flex-1 ${isMobile ? 'ml-0 pt-14' : 'ml-16'} ${isLandingPage && isMobile ? 'pt-0' : ''}`}>
+      <main 
+        className={`flex-1 w-full min-w-0 ${
+          isMobile ? 'ml-0' : 'ml-16'
+        }`}
+      >
         <div className={`fixed z-50 ${isMobile ? 'top-3 right-3' : 'top-4 right-4'}`}>
           <AuthButton />
         </div>

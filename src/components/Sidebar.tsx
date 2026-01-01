@@ -80,17 +80,18 @@ export const Sidebar = () => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
 
+  // Mobile: hamburger menu
   if (isMobile) {
     return (
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <button className="fixed top-4 left-4 z-50 w-12 h-12 border-3 border-border bg-card shadow-brutal flex items-center justify-center hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all">
+          <button className="fixed top-3 left-3 z-[60] w-10 h-10 border-2 border-border bg-card shadow-brutal flex items-center justify-center hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover transition-all">
             <Menu className="w-5 h-5" />
           </button>
         </SheetTrigger>
         <SheetContent 
           side="left" 
-          className="w-64 p-0 border-r-3 border-border bg-card"
+          className="w-64 p-0 border-r-3 border-border bg-card z-[70]"
         >
           <MobileSidebarContent onNavClick={() => setOpen(false)} />
         </SheetContent>
@@ -98,6 +99,7 @@ export const Sidebar = () => {
     );
   }
 
+  // Desktop: fixed sidebar
   return (
     <aside className="fixed left-0 top-0 h-screen w-16 border-r-3 border-border bg-card z-50">
       <SidebarContent />
