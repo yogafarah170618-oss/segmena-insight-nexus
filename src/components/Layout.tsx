@@ -1,5 +1,6 @@
 import { Sidebar } from "./Sidebar";
 import { AuthButton } from "./AuthButton";
+import { DarkModeToggle } from "./DarkModeToggle";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLocation } from "react-router-dom";
 
@@ -19,7 +20,8 @@ export const Layout = ({ children }: LayoutProps) => {
           isMobile ? 'ml-0' : 'ml-16'
         }`}
       >
-        <div className={`fixed z-50 ${isMobile ? 'top-3 right-3' : 'top-4 right-4'}`}>
+        <div className={`fixed z-50 flex items-center gap-2 ${isMobile ? 'top-3 right-3' : 'top-4 right-4'}`}>
+          <DarkModeToggle />
           <AuthButton />
         </div>
         {children}
