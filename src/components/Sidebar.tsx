@@ -18,8 +18,8 @@ const SidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
   <div className="flex flex-col items-center py-6 space-y-6">
     {/* Logo */}
     <NavLink to="/" className="mb-2" onClick={onNavClick}>
-      <div className="w-12 h-12 border-3 border-border bg-foreground flex items-center justify-center">
-        <span className="font-brutal text-background text-lg">S</span>
+      <div className="w-12 h-12 flex items-center justify-center">
+        <img src={segmenaLogo} alt="Segmena Logo" className="w-12 h-12 object-contain" />
       </div>
     </NavLink>
 
@@ -48,8 +48,8 @@ const MobileSidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
     {/* Logo */}
     <div className="px-4 mb-6">
       <NavLink to="/" onClick={onNavClick} className="flex items-center gap-3">
-        <div className="w-10 h-10 border-3 border-border bg-foreground flex items-center justify-center flex-shrink-0">
-          <span className="font-brutal text-background text-sm">S</span>
+        <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+          <img src={segmenaLogo} alt="Segmena Logo" className="w-10 h-10 object-contain" />
         </div>
         <span className="font-brutal text-xl">SEGMENA</span>
       </NavLink>
